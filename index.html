@@ -254,7 +254,7 @@ const LWT = (()=>{
     const x=30,y=40,w=200,h=200;
     el('rect',{x:x-4,y:y-4,width:w+8,height:h+8,fill:'#3a1f0a'},g);
     el('rect',{x,y,width:w,height:h,fill:'url(#paper)'},g);
-    el('text',{x:x+w/2,y:y+18,'text-anchor':'middle','font-family':'Georgia,serif','font-size':12,'font-weight':'bold','letter-spacing':4,fill:'#1a1008'},g).textContent='OUTCOMES';
+    el('text',{x:x+w/2,y:y+19,'text-anchor':'middle','font-family':'Georgia,serif','font-size':16,'font-weight':'bold','letter-spacing':6,fill:'#1a1008'},g).textContent='NATURE SIX';
     const labels=['AIR','WATER','SOIL','BIODIVRSTY','EQUITY','CARBON'];
     const cellW=w/3, cellH=(h-30)/2;
     for(let i=0;i<6;i++){
@@ -470,22 +470,6 @@ function placeAt(d,w,h,scale){
     el('rect',{x:cx,y:ry,width:26,height:14,rx:3,fill:ci===4&&ry===50?'#a52323':'#2a2a2a'},g);
   }));
   el('text',{x:151,y:60,'text-anchor':'middle','font-family':'Georgia,serif','font-size':8,'font-weight':'bold',fill:'#fbf3df'},g).textContent='DEBIT';
-}
-
-/* =================================================================
-   7b. MAKE WITHDRAWAL placard — small brass sign next to the bell
-================================================================= */
-{
-  const [sx,sy]=iso(290,420,180);
-  const sg=el('g',{filter:'url(#frameShadow)',transform:`translate(${sx} ${sy})`});
-  // wooden stand
-  el('rect',{x:-78,y:-4,width:156,height:8,fill:'#3a1f0a'},sg);
-  el('rect',{x:-4,y:-12,width:8,height:8,fill:'#3a1f0a'},sg);
-  // upright brass plaque
-  el('rect',{x:-72,y:-44,width:144,height:36,fill:'#1a1008'},sg);
-  el('rect',{x:-68,y:-40,width:136,height:28,fill:'url(#brass)'},sg);
-  el('rect',{x:-62,y:-36,width:124,height:20,fill:'#100a04'},sg);
-  el('text',{x:0,y:-22,'text-anchor':'middle','font-family':'Georgia,serif','font-size':12,'font-weight':'bold','letter-spacing':4,fill:'url(#brass)'},sg).textContent='MAKE WITHDRAWAL';
 }
 
 /* =================================================================
