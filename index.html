@@ -155,13 +155,14 @@ const BWT = (()=>{ // matrix(a b c d e f)
   const f=OY-(DEPTH+WIDTH)*CY-HEIGHT*S;
   return `matrix(${a} ${b} ${c} ${d} ${e} ${f})`;
 })();
-// Right wall (at w=0): local origin = camera-top-left = front-top corner of right wall.
-//   local +x → camera right (increasing d)
+// Left wall (at w=WIDTH): the interior wall on Darwin's right (viewer's left).
+//   local origin = camera-top-left = front-top corner of the left wall
+//   local +x → camera right (increasing d, going into the room)
 //   local +y → camera down  (decreasing h)
-const RWT = (()=>{
+const LWT = (()=>{
   const a=CX, b=-CY, c=0, d=S;
-  const e=OX;
-  const f=OY-HEIGHT*S;
+  const e=OX-WIDTH*CX;
+  const f=OY-WIDTH*CY-HEIGHT*S;
   return `matrix(${a} ${b} ${c} ${d} ${e} ${f})`;
 })();
 
@@ -277,14 +278,14 @@ const RWT = (()=>{
 }
 
 /* =================================================================
-   3. RIGHT WALL (with door)
+   3. LEFT WALL (interior wall on Darwin's right — viewer's left)
 ================================================================= */
 {
-  const corners=[iso(0,0,0),iso(DEPTH,0,0),iso(DEPTH,0,HEIGHT),iso(0,0,HEIGHT)];
+  const corners=[iso(0,WIDTH,0),iso(DEPTH,WIDTH,0),iso(DEPTH,WIDTH,HEIGHT),iso(0,WIDTH,HEIGHT)];
   poly(corners,{fill:'url(#wallGdark)'});
   poly(corners,{fill:'rgba(0,0,0,.18)'});
 
-  const g=el('g',{transform:RWT});
+  const g=el('g',{transform:LWT});
   // wainscoting
   el('rect',{x:0,y:HEIGHT-50,width:DEPTH,height:50,fill:'#5e431f'},g);
   el('rect',{x:0,y:HEIGHT-50,width:DEPTH,height:3,fill:'#32200a'},g);
@@ -292,7 +293,7 @@ const RWT = (()=>{
 
   // GO OUTSIDE sign hanging above door
   {
-    const x=250,y=18,w=180,h=44;
+    const x=300,y=58,w=180,h=44;
     el('rect',{x:x-3,y:y-3,width:w+6,height:h+6,fill:'#3a1f0a'},g);
     el('rect',{x,y,width:w,height:h,fill:'url(#paper)'},g);
     el('text',{x:x+w/2,y:y+30,'text-anchor':'middle','font-family':'Georgia,serif','font-size':22,'font-weight':'bold','letter-spacing':4,fill:'#1a1008'},g).textContent='GO OUTSIDE';
@@ -302,7 +303,7 @@ const RWT = (()=>{
   }
   // DOOR
   {
-    const x=265,y=70,w=150,h=180;
+    const x=315,y=110,w=150,h=180;
     el('rect',{x:x-4,y:y-4,width:w+8,height:h+8,fill:'#2a1808'},g);
     el('rect',{x,y,width:w,height:h,fill:'#6e4322'},g);
     // panels
@@ -310,12 +311,12 @@ const RWT = (()=>{
     el('rect',{x:x+14,y:y+14,width:w-28,height:52,fill:'#5a3216'},g);
     el('rect',{x:x+10,y:y+80,width:w-20,height:90,fill:'#3a1f0a'},g);
     el('rect',{x:x+14,y:y+84,width:w-28,height:82,fill:'#5a3216'},g);
-    // knob
+    // knob (on the back-of-room side of the door)
     el('circle',{cx:x+w-16,cy:y+h/2,r:5,fill:'url(#brass)',stroke:'#3a1f0a','stroke-width':1.5},g);
     el('circle',{cx:x+w-16,cy:y+h/2,r:1.5,fill:'#3a1f0a'},g);
   }
-  // click area
-  const dpts=[iso(450,0,0),iso(620,0,0),iso(620,0,200),iso(450,0,200)];
+  // click area (matches the door's iso projection)
+  const dpts=[iso(315,WIDTH,10),iso(465,WIDTH,10),iso(465,WIDTH,190),iso(315,WIDTH,190)];
   poly(dpts,{class:'clickable',id:'doorHit',fill:'transparent'});
 }
 
