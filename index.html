@@ -228,9 +228,9 @@ const LWT = (()=>{
     }
   }
 
-  // ----- APPLY FOR EXTRACTION sign (center) -----
+  // ----- APPLY FOR EXTRACTION sign (center, raised) -----
   {
-    const x=320,y=60,w=270,h=150;
+    const x=320,y=10,w=270,h=130;
     el('rect',{x:x-4,y:y-4,width:w+8,height:h+8,fill:'#3a1f0a'},g);
     el('rect',{x,y,width:w,height:h,fill:'url(#paper)'},g);
     el('rect',{x:x+10,y:y+10,width:w-20,height:2,fill:'#3a1f0a'},g);
@@ -492,6 +492,22 @@ function placeAt(d,w,h,scale){
 }
 
 /* =================================================================
+   7b. MAKE WITHDRAWAL placard — small brass sign next to the bell
+================================================================= */
+{
+  const [sx,sy]=iso(290,420,180);
+  const sg=el('g',{filter:'url(#frameShadow)',transform:`translate(${sx} ${sy})`});
+  // wooden stand
+  el('rect',{x:-78,y:-4,width:156,height:8,fill:'#3a1f0a'},sg);
+  el('rect',{x:-4,y:-12,width:8,height:8,fill:'#3a1f0a'},sg);
+  // upright brass plaque
+  el('rect',{x:-72,y:-44,width:144,height:36,fill:'#1a1008'},sg);
+  el('rect',{x:-68,y:-40,width:136,height:28,fill:'url(#brass)'},sg);
+  el('rect',{x:-62,y:-36,width:124,height:20,fill:'#100a04'},sg);
+  el('text',{x:0,y:-22,'text-anchor':'middle','font-family':'Georgia,serif','font-size':12,'font-weight':'bold','letter-spacing':4,fill:'url(#brass)'},sg).textContent='MAKE WITHDRAWAL';
+}
+
+/* =================================================================
    8. SERVICE BELL BUTTON — centered on desk surface
 ================================================================= */
 {
@@ -542,9 +558,9 @@ function placeAt(d,w,h,scale){
     fill:'url(#paper)',stroke:'#1a1008','stroke-width':4,filter:'url(#softShadow)'
   },g);
   const tg=el('g',{},g);
-  el('text',{x:680,y:160,'text-anchor':'middle','font-family':'Georgia,serif','font-size':38,fill:'#1a1008'},tg).textContent='Sorry — but your Nature Account';
+  el('text',{x:680,y:160,'text-anchor':'middle','font-family':'Georgia,serif','font-size':38,fill:'#1a1008'},tg).textContent='Sorry — but your account is';
   const t2=el('text',{x:680,y:228,'text-anchor':'middle','font-family':'Georgia,serif','font-size':38,fill:'#1a1008'},tg);
-  t2.innerHTML='is <tspan font-weight="bold" fill="#a52323">12,000</tspan> <tspan font-style="italic">overdrawn</tspan>.';
+  t2.innerHTML='<tspan font-weight="bold" fill="#a52323">12,000 years</tspan> <tspan font-style="italic">overdue</tspan>.';
   el('text',{x:680,y:302,'text-anchor':'middle','font-family':'Georgia,serif','font-size':18,'letter-spacing':6,fill:'#7a5a32'},tg).textContent='— M. ALVA';
 }
 
