@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NATURE ACCOUNT — Molotov Alva, Bank Manager</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#000;overflow:hidden;font-family:'Courier New',Courier,monospace;color:#fff}
+  #stage{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#1a1208 0%,#000 80%)}
+  canvas{
+    image-rendering:pixelated;
+    image-rendering:-moz-crisp-edges;
+    image-rendering:crisp-edges;
+    width:min(100vw, 160vh);
+    height:min(62.5vw, 100vh);
+    cursor:pointer;
+    box-shadow:0 0 60px rgba(0,0,0,.9), 0 0 0 2px #221408;
+  }
+  #title{
+    position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);
+    color:#c8a878;font-size:clamp(9px,1.2vw,14px);letter-spacing:.32em;
+    text-transform:uppercase;z-index:10;text-shadow:1px 1px 0 #000;pointer-events:none;
+    white-space:nowrap;
+  }
+  #hint{
+    position:absolute;bottom:1.4vh;left:50%;transform:translateX(-50%);
+    color:#7a5a32;font-size:clamp(8px,1vw,12px);letter-spacing:.28em;
+    text-transform:uppercase;z-index:10;text-shadow:1px 1px 0 #000;pointer-events:none;
+    white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="game" width="320" height="200" aria-label="Bank manager office"></canvas>
+  <div id="title">Nature Account &nbsp;·&nbsp; Molotov Alva, Bank Manager</div>
+  <div id="hint">Click the red button</div>
+</div>
+<script>
+(() => {
+  const W = 320, H = 200;
+  const cv = document.getElementById('game');
+  const ctx = cv.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+
+  const C = {
+    wall:'#cdb085', wallDk:'#a48662', wallLn:'#8a6a44', baseboard:'#5a3a1c',
+    floor:'#5b3a1e', floorDk:'#3d2511', floorLt:'#7a4f2c',
+    deskTop:'#5a3216', deskFront:'#3e2210', deskTrim:'#7a4422', deskHi:'#8a5028',
+    paper:'#f1e8d8', paperShd:'#cdbf9c',
+    black:'#1a1a1a', ink:'#2a2118',
+    red:'#a52323', redDk:'#6e1414', redHi:'#e84b4b',
+    green:'#3b6a2c', greenDk:'#1f3d18', greenLt:'#69a04a',
+    sky:'#8db8d4', sun:'#f4d486',
+    globeB:'#3478a8', globeL:'#4d9450', globeS:'#1d4a70',
+    base:'#3a2515',
+    calcBg:'#dadada', calcKey:'#2a2a2a', calcScreen:'#9fb89f',
+    skin:'#dca77a', skinShd:'#a87248', hair:'#1f1209',
+    suit:'#1d2c3c', suitShd:'#0f1a26', shirt:'#e8e2d2', tie:'#8a1c1c', tieShd:'#5a0e0e',
+    gold:'#caa44a', goldDk:'#8a6e22',
+    door:'#6e4322', doorDk:'#3a2110', doorHi:'#946238', knob:'#caa44a',
+    glow:'rgba(255,210,140,0.15)',
+  };
+
+  const rect = (c, x, y, w, h) => { ctx.fillStyle = c; ctx.fillRect(x|0, y|0, w|0, h|0); };
+  const px   = (c, x, y)       => rect(c, x, y, 1, 1);
+
+  // ===== Background: wall + floor =====
+  function drawRoom() {
+    rect(C.wall, 0, 0, W, 142);
+    for (let i = 0; i < W; i += 14) rect(C.wallDk, i, 0, 1, 142);
+    for (let i = 0; i < W; i += 28) rect(C.wallLn, i + 7, 0, 1, 142);
+    rect(C.wallDk, 0, 136, W, 2);
+    rect(C.baseboard, 0, 138, W, 6);
+
+    rect(C.floor, 0, 144, W, H - 144);
+    rect(C.floorLt, 0, 144, W, 1);
+    for (let i = 0; i < 6; i++) rect(C.floorDk, 0, 152 + i * 9, W, 1);
+    for (let i = 0; i < W; i += 32) rect(C.floorDk, i, 144, 1, H - 144);
+
+    // overhead warm light pool
+    const grd = ctx.createRadialGradient(160, 90, 10, 160, 110, 180);
+    grd.addColorStop(0, 'rgba(255,220,160,0.22)');
+    grd.addColorStop(1, 'rgba(255,220,160,0)');
+    ctx.fillStyle = grd; ctx.fillRect(0, 0, W, H);
+  }
+
+  // ===== Amazon framed picture (left wall) =====
+  function drawAmazon() {
+    const fx = 12, fy = 22, fw = 74, fh = 50;
+    rect(C.goldDk, fx - 2, fy - 2, fw + 4, fh + 4);
+    rect(C.gold,   fx - 1, fy - 1, fw + 2, fh + 2);
+    rect(C.deskFront, fx, fy, fw, fh);
+
+    // sky
+    rect(C.sky, fx + 3, fy + 3, fw - 6, 14);
+    // sun
+    rect(C.sun, fx + fw - 16, fy + 6, 5, 5);
+    rect('#f8e3a6', fx + fw - 15, fy + 7, 3, 3);
+    // back canopy
+    rect(C.greenDk, fx + 3, fy + 14, fw - 6, 10);
+    for (let i = 0; i < 9; i++) {
+      rect(C.green, fx + 3 + i * 8, fy + 12, 5, 6);
+      rect(C.greenLt, fx + 4 + i * 8, fy + 11, 2, 2);
+    }
+    // mid ground
+    rect('#274017', fx + 3, fy + 22, fw - 6, fh - 26);
+    // river
+    rect('#4d83a8', fx + 6, fy + 30, fw - 12, 4);
+    rect('#6ea3c5', fx + 8, fy + 31, fw - 16, 1);
+    // foreground trees
+    for (let i = 0; i < 5; i++) {
+      const tx = fx + 6 + i * 13;
+      rect('#2a1808', tx, fy + 22, 2, 18);
+      rect(C.green,    tx - 3, fy + 18, 8, 7);
+      rect(C.greenDk,  tx - 2, fy + 16, 6, 5);
+      rect(C.greenLt,  tx - 1, fy + 17, 2, 2);
+    }
+    // bird silhouette
+    rect(C.black, fx + 28, fy + 8, 1, 1);
+    rect(C.black, fx + 27, fy + 7, 1, 1);
+    rect(C.black, fx + 29, fy + 7, 1, 1);
+
+    // brass plaque
+    rect(C.goldDk, fx + 18, fy + fh + 2, 38, 5);
+    rect(C.gold,   fx + 18, fy + fh + 2, 38, 1);
+    ctx.fillStyle = C.black;
+    ctx.font = '5px monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
+    ctx.fillText('AMAZONIA', fx + 37, fy + fh + 3);
+    ctx.textAlign = 'left';
+  }
+
+  // ===== "APPLY FOR EXTRACTION" sign =====
+  function drawApplySign() {
+    const sx = 100, sy = 26, sw = 76, sh = 30;
+    rect(C.deskFront, sx - 2, sy - 2, sw + 4, sh + 4);
+    rect(C.deskTrim,  sx - 1, sy - 1, sw + 2, sh + 2);
+    rect(C.paper, sx, sy, sw, sh);
+    // double frame line
+    rect(C.black, sx + 2, sy + 2, sw - 4, 1);
+    rect(C.black, sx + 2, sy + sh - 3, sw - 4, 1);
+
+    ctx.fillStyle = C.black;
+    ctx.textBaseline = 'top';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('APPLY FOR', sx + sw / 2, sy + 6);
+    ctx.fillText('EXTRACTION', sx + sw / 2, sy + 16);
+    ctx.textAlign = 'left';
+    // red stamp
+    ctx.save();
+    ctx.translate(sx + sw - 16, sy + sh - 10);
+    ctx.rotate(-0.25);
+    ctx.fillStyle = C.red;
+    ctx.fillRect(-10, -3, 20, 7);
+    ctx.fillStyle = C.paper;
+    ctx.font = 'bold 4px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('APPROVED', 0, -1);
+    ctx.restore();
+    ctx.textAlign = 'left';
+  }
+
+  // ===== Hexagon "Outcomes" poster (right wall) =====
+  function hexPath(cx, cy, r) {
+    ctx.beginPath();
+    for (let a = 0; a < 6; a++) {
+      const ang = a * Math.PI / 3 - Math.PI / 2;
+      const x = cx + Math.cos(ang) * r;
+      const y = cy + Math.sin(ang) * r;
+      if (!a) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  }
+
+  function drawHexIcon(idx, cx, cy) {
+    ctx.fillStyle = C.black;
+    if (idx === 0) { // AIR — wind lines
+      rect(C.black, cx - 5, cy - 2, 6, 1);
+      rect(C.black, cx + 2, cy - 2, 2, 1);
+      rect(C.black, cx - 4, cy + 1, 4, 1);
+      rect(C.black, cx + 1, cy + 1, 3, 1);
+      rect(C.black, cx - 3, cy + 4, 5, 1);
+    } else if (idx === 1) { // WATER — droplet
+      rect(C.black, cx, cy - 4, 1, 1);
+      rect(C.black, cx - 1, cy - 3, 3, 1);
+      rect(C.black, cx - 2, cy - 1, 5, 1);
+      rect(C.black, cx - 2, cy, 1, 3);
+      rect(C.black, cx + 2, cy, 1, 3);
+      rect(C.black, cx - 1, cy + 3, 3, 1);
+    } else if (idx === 2) { // SOIL — strata + bug
+      rect(C.black, cx - 5, cy - 3, 11, 1);
+      rect(C.black, cx - 5, cy + 4, 11, 1);
+      rect(C.black, cx - 3, cy, 2, 1); // bug
+      rect(C.black, cx, cy + 1, 3, 1);
+      rect(C.black, cx + 4, cy - 1, 1, 1);
+    } else if (idx === 3) { // BIODIVERSITY — bird + leaves
+      rect(C.black, cx - 1, cy - 2, 4, 3);
+      rect(C.black, cx + 3, cy - 1, 1, 1);
+      rect(C.black, cx - 2, cy + 1, 2, 1);
+      rect(C.black, cx - 4, cy - 3, 2, 1); // bee
+      rect(C.black, cx - 4, cy + 3, 3, 1); // leaf
+      rect(C.black, cx + 3, cy + 3, 2, 1);
+    } else if (idx === 4) { // EQUITY — farmer + furrows
+      rect(C.black, cx + 1, cy - 3, 3, 3);  // head
+      rect(C.black, cx, cy - 4, 5, 1);      // hat
+      rect(C.black, cx - 5, cy + 1, 11, 1); // ground
+      rect(C.black, cx - 4, cy + 3, 9, 1);
+    } else if (idx === 5) { // CARBON — CO2 letters
+      ctx.font = 'bold 5px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = C.black;
+      ctx.fillText('CO2', cx, cy + 1);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+    }
+  }
+
+  function drawHexPoster() {
+    const pw = 100, ph = 76, p0x = 208, p0y = 16;
+    rect(C.deskFront, p0x - 2, p0y - 2, pw + 4, ph + 4);
+    rect(C.deskTrim, p0x - 1, p0y - 1, pw + 2, ph + 2);
+    rect(C.paper, p0x, p0y, pw, ph);
+
+    // tiny top label
+    ctx.fillStyle = C.black;
+    ctx.textBaseline = 'top';
+    ctx.font = 'bold 4px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('OUTCOMES', p0x + pw / 2, p0y + 3);
+
+    const labels = ['AIR','WATER','SOIL','BIODIVERSITY','EQUITY','CARBON'];
+    const cols = 3, rows = 2;
+    const cellW = pw / cols, cellH = (ph - 12) / rows;
+    for (let i = 0; i < 6; i++) {
+      const c = i % cols, r = Math.floor(i / cols);
+      const cx = p0x + cellW * c + cellW / 2;
+      const cy = p0y + 12 + cellH * r + cellH / 2 - 4;
+      ctx.fillStyle = C.paper;
+      hexPath(cx, cy, 10); ctx.fill();
+      ctx.strokeStyle = C.black; ctx.lineWidth = 1;
+      hexPath(cx, cy, 10); ctx.stroke();
+      drawHexIcon(i, cx, cy);
+      ctx.fillStyle = C.black;
+      ctx.font = '3px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(labels[i], cx, cy + 12);
+    }
+    ctx.textAlign = 'left';
+  }
+
+  // ===== Door =====
+  function drawDoor() {
+    const dx = 272, dy = 78, dw = 40, dh = 80;
+    // frame
+    rect(C.doorDk, dx - 3, dy - 3, dw + 6, dh + 3);
+    // door
+    rect(C.door, dx, dy, dw, dh);
+    rect(C.doorHi, dx, dy, dw, 1);
+    rect(C.doorHi, dx, dy, 1, dh);
+    rect(C.doorDk, dx + dw - 1, dy, 1, dh);
+    rect(C.doorDk, dx, dy + dh - 1, dw, 1);
+    // panels
+    rect(C.doorDk, dx + 4,  dy + 6,  dw - 8, 22);
+    rect(C.door,   dx + 6,  dy + 8,  dw - 12, 18);
+    rect(C.doorDk, dx + 4,  dy + 32, dw - 8, 32);
+    rect(C.door,   dx + 6,  dy + 34, dw - 12, 28);
+    // knob
+    rect(C.knob,   dx + dw - 8, dy + 44, 3, 3);
+    rect(C.goldDk, dx + dw - 8, dy + 47, 3, 1);
+
+    // GO OUTSIDE sign above door
+    const sx = dx - 2, sy = dy - 16, sw = dw + 4, sh = 11;
+    rect(C.deskFront, sx - 1, sy - 1, sw + 2, sh + 2);
+    rect(C.paper, sx, sy, sw, sh);
+    ctx.fillStyle = C.black;
+    ctx.font = 'bold 6px monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
+    ctx.fillText('GO OUTSIDE', sx + sw / 2, sy + 3);
+    ctx.textAlign = 'left';
+
+    // EXIT arrow on door
+    ctx.fillStyle = C.paper;
+    ctx.font = 'bold 4px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('→', dx + dw / 2, dy + 70);
+    ctx.textAlign = 'left';
+  }
+
+  // ===== Desk =====
+  function drawDesk() {
+    // desk top
+    rect(C.deskTop, 0, 108, W, 8);
+    rect(C.deskHi, 0, 108, W, 1);
+    // desk front
+    rect(C.deskFront, 0, 116, W, 28);
+    // panels / drawers
+    rect(C.deskTrim, 24, 122, 60, 18);
+    rect(C.deskTrim, 100, 122, 60, 18);
+    rect(C.deskTrim, 176, 122, 60, 18);
+    rect(C.deskTrim, 252, 122, 60, 18);
+    // drawer pulls
+    for (let i = 0; i < 4; i++) {
+      rect(C.gold, 28 + i * 76, 131, 4, 2);
+      rect(C.goldDk, 28 + i * 76, 132, 4, 1);
+    }
+    // edge highlight
+    rect(C.deskHi, 0, 116, W, 1);
+  }
+
+  // ===== Globe =====
+  function drawGlobe() {
+    const gx = 50, gy = 102;
+    // base
+    rect(C.base, gx - 2, gy + 8, 14, 2);
+    rect(C.base, gx + 2, gy + 4, 6, 4);
+    // sphere
+    ctx.fillStyle = C.globeB;
+    ctx.beginPath(); ctx.arc(gx + 5, gy + 2, 7, 0, Math.PI * 2); ctx.fill();
+    // continents
+    ctx.fillStyle = C.globeL;
+    rect(C.globeL, gx + 2, gy - 1, 3, 4);
+    rect(C.globeL, gx + 6, gy + 2, 4, 3);
+    rect(C.globeL, gx + 3, gy + 4, 2, 2);
+    // meridian
+    ctx.strokeStyle = C.gold; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(gx + 5, gy + 2, 8, 8, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    // shadow
+    ctx.fillStyle = C.globeS;
+    ctx.beginPath(); ctx.arc(gx + 9, gy + 4, 2, 0, Math.PI * 2); ctx.fill();
+    // axis pin
+    rect(C.gold, gx + 4, gy - 6, 2, 2);
+  }
+
+  // ===== Calculator =====
+  function drawCalc() {
+    const ax = 230, ay = 100;
+    rect(C.calcBg, ax, ay, 28, 16);
+    rect('#a8a8a8', ax, ay + 15, 28, 1);
+    rect('#a8a8a8', ax + 27, ay, 1, 16);
+    // screen
+    rect(C.calcScreen, ax + 2, ay + 2, 24, 4);
+    ctx.fillStyle = C.black;
+    ctx.font = '3px monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'right';
+    ctx.fillText('-12000.00', ax + 25, ay + 2);
+    ctx.textAlign = 'left';
+    // keys
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 5; c++) {
+        rect(C.calcKey, ax + 2 + c * 5, ay + 7 + r * 3, 4, 2);
+      }
+    }
+  }
+
+  // ===== Name plate =====
+  function drawNamePlate() {
+    const nx = 124, ny = 110, nw = 72, nh = 9;
+    rect(C.goldDk, nx, ny, nw, nh);
+    rect(C.gold,   nx, ny, nw, 1);
+    rect(C.gold,   nx, ny, 1, nh);
+    rect(C.black, nx + 2, ny + 2, nw - 4, nh - 4);
+    ctx.fillStyle = C.gold;
+    ctx.font = 'bold 6px monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
+    ctx.fillText('MOLOTOV ALVA', nx + nw / 2, ny + 2);
+    ctx.textAlign = 'left';
+  }
+
+  // ===== Service-bell / "ASK TO GO OUTSIDE" button =====
+  let askBtnHit = null;
+  function drawAskButton(highlight) {
+    const bx = 32, by = 118, bw = 64, bh = 20;
+    askBtnHit = { x: bx, y: by, w: bw, h: bh };
+    // base
+    rect(C.black, bx, by + bh - 3, bw, 3);
+    rect('#3a2008', bx + 1, by + bh - 4, bw - 2, 1);
+    // body
+    rect(C.redDk, bx, by, bw, bh - 3);
+    rect(highlight ? C.redHi : C.red, bx + 1, by + 1, bw - 2, bh - 5);
+    rect(C.redHi, bx + 2, by + 2, bw - 4, 1);
+    // label
+    ctx.fillStyle = C.paper;
+    ctx.font = 'bold 7px monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
+    ctx.fillText('ASK TO GO', bx + bw / 2, by + 3);
+    ctx.fillText('OUTSIDE', bx + bw / 2, by + 10);
+    ctx.textAlign = 'left';
+  }
+
+  // ===== Bank manager =====
+  function drawManager(blink) {
+    const mx = 160;
+    // shoulders / jacket
+    rect(C.suit, mx - 26, 96, 52, 14);
+    rect(C.suitShd, mx - 26, 96, 52, 2);
+    rect(C.suitShd, mx - 26, 96, 4, 14);
+    rect(C.suitShd, mx + 22, 96, 4, 14);
+    // shirt v
+    rect(C.shirt, mx - 5, 98, 10, 12);
+    rect(C.suit, mx - 4, 100, 8, 6);
+    rect(C.suit, mx - 3, 102, 6, 4);
+    // tie
+    rect(C.tie, mx - 1, 100, 2, 10);
+    rect(C.tieShd, mx, 100, 1, 10);
+    // neck
+    rect(C.skin, mx - 3, 92, 6, 6);
+    rect(C.skinShd, mx - 3, 96, 6, 2);
+    // head
+    rect(C.skin, mx - 8, 74, 16, 20);
+    // jaw shadow
+    rect(C.skinShd, mx - 8, 90, 16, 2);
+    // hair
+    rect(C.hair, mx - 8, 70, 16, 5);
+    rect(C.hair, mx - 8, 70, 2, 14);
+    rect(C.hair, mx + 6, 70, 2, 14);
+    rect(C.hair, mx - 7, 74, 14, 1);
+    // ears
+    rect(C.skin, mx - 9, 80, 2, 4);
+    rect(C.skin, mx + 7, 80, 2, 4);
+    rect(C.skinShd, mx - 9, 82, 1, 2);
+    rect(C.skinShd, mx + 8, 82, 1, 2);
+    // glasses frames
+    rect(C.black, mx - 6, 80, 5, 4);
+    rect(C.black, mx + 1, 80, 5, 4);
+    rect(C.black, mx - 1, 81, 2, 1); // bridge
+    // glasses lenses
+    rect('#c4d4e0', mx - 5, 81, 3, 2);
+    rect('#c4d4e0', mx + 2, 81, 3, 2);
+    // pupils
+    if (!blink) {
+      rect(C.black, mx - 4, 81, 1, 1);
+      rect(C.black, mx + 3, 81, 1, 1);
+    } else {
+      rect(C.black, mx - 5, 82, 3, 1);
+      rect(C.black, mx + 2, 82, 3, 1);
+    }
+    // brow
+    rect(C.hair, mx - 6, 79, 5, 1);
+    rect(C.hair, mx + 1, 79, 5, 1);
+    // nose
+    rect(C.skinShd, mx, 84, 1, 4);
+    rect(C.skinShd, mx - 1, 87, 3, 1);
+    // mouth — flat line
+    rect(C.ink, mx - 3, 90, 7, 1);
+    // moustache hint
+    rect(C.hair, mx - 3, 88, 7, 1);
+    // pocket square
+    rect(C.paper, mx - 22, 100, 5, 2);
+  }
+
+  // ===== Speech bubble =====
+  let speech = null; // { lines, until, fromX, fromY }
+  function drawSpeech() {
+    if (!speech) return;
+    if (performance.now() > speech.until) { speech = null; return; }
+    const lines = speech.lines;
+    const padX = 4, padY = 3, lineH = 7;
+    const charW = 4;
+    const maxLen = Math.max(...lines.map(l => l.length));
+    const bw = maxLen * charW + padX * 2;
+    const bh = lines.length * lineH + padY * 2;
+    let bx = 90;
+    const by = 16;
+
+    // shadow
+    rect('rgba(0,0,0,0.45)', bx + 3, by + 3, bw, bh);
+    // bubble
+    rect(C.paper, bx, by, bw, bh);
+    // borders
+    rect(C.black, bx, by, bw, 1);
+    rect(C.black, bx, by + bh - 1, bw, 1);
+    rect(C.black, bx, by, 1, bh);
+    rect(C.black, bx + bw - 1, by, 1, bh);
+
+    // tail (pointing down-right toward manager head ~160,82)
+    const tx = bx + bw - 22, ty = by + bh;
+    rect(C.paper, tx, ty, 8, 2);
+    rect(C.paper, tx + 2, ty + 2, 6, 2);
+    rect(C.paper, tx + 4, ty + 4, 4, 2);
+    rect(C.paper, tx + 6, ty + 6, 2, 2);
+    rect(C.black, tx, ty, 1, 2);
+    rect(C.black, tx + 1, ty + 2, 1, 1);
+    rect(C.black, tx + 3, ty + 4, 1, 1);
+    rect(C.black, tx + 5, ty + 6, 1, 1);
+    rect(C.black, tx + 7, ty, 1, 1);
+    rect(C.black, tx + 7, ty + 1, 1, 1);
+    rect(C.black, tx + 7, ty + 2, 1, 2);
+    rect(C.black, tx + 7, ty + 4, 1, 2);
+    rect(C.black, tx + 7, ty + 6, 1, 2);
+
+    // text
+    ctx.fillStyle = C.black;
+    ctx.font = 'bold 6px monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'left';
+    lines.forEach((l, i) => ctx.fillText(l, bx + padX, by + padY + i * lineH));
+  }
+
+  // ===== Stack: build the full scene =====
+  let blinking = false, hover = false;
+  function render() {
+    rect(C.black, 0, 0, W, H);
+    drawRoom();
+    drawAmazon();
+    drawApplySign();
+    drawHexPoster();
+    drawDoor();
+    drawDesk();
+    drawManager(blinking);
+    drawNamePlate();
+    drawGlobe();
+    drawCalc();
+    drawAskButton(hover);
+    drawSpeech();
+
+    // soft vignette
+    const g = ctx.createRadialGradient(160, 100, 80, 160, 100, 200);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, 'rgba(0,0,0,0.55)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+
+  // ===== Interaction =====
+  function canvasCoords(evt) {
+    const r = cv.getBoundingClientRect();
+    const sx = W / r.width, sy = H / r.height;
+    return { x: (evt.clientX - r.left) * sx, y: (evt.clientY - r.top) * sy };
+  }
+  function inRect(p, b) {
+    return p.x >= b.x && p.x <= b.x + b.w && p.y >= b.y && p.y <= b.y + b.h;
+  }
+
+  const doorHit = { x: 270, y: 78, w: 44, h: 80 };
+
+  function trigger() {
+    speech = {
+      lines: ['Sorry, but your', 'Nature Account is', '12,000 overdrawn.'],
+      until: performance.now() + 7000,
+    };
+  }
+
+  cv.addEventListener('mousemove', e => {
+    const p = canvasCoords(e);
+    const wasHover = hover;
+    hover = (askBtnHit && inRect(p, askBtnHit)) || inRect(p, doorHit);
+    cv.style.cursor = hover ? 'pointer' : 'crosshair';
+    if (wasHover !== hover) render();
+  });
+  cv.addEventListener('click', e => {
+    const p = canvasCoords(e);
+    if ((askBtnHit && inRect(p, askBtnHit)) || inRect(p, doorHit)) {
+      trigger();
+      render();
+    }
+  });
+
+  // blink loop
+  setInterval(() => {
+    blinking = true; render();
+    setTimeout(() => { blinking = false; render(); }, 140);
+  }, 4200);
+
+  // speech fade out tick
+  setInterval(() => { if (speech) render(); }, 200);
+
+  render();
+})();
+</script>
+</body>
+</html>
