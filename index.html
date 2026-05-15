@@ -3,579 +3,574 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NATURE ACCOUNT — Molotov Alva, Bank Manager</title>
+<title>Nature Account — Molotov Alva, Bank Manager</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%;background:#000;overflow:hidden;font-family:'Courier New',Courier,monospace;color:#fff}
-  #stage{position:relative;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#1a1208 0%,#000 80%)}
-  canvas{
-    image-rendering:pixelated;
-    image-rendering:-moz-crisp-edges;
-    image-rendering:crisp-edges;
+  html,body{height:100%;background:#080502;overflow:hidden;color:#e8d3a8;font-family:Georgia,'Times New Roman',serif}
+  #frame{
+    position:relative;width:100vw;height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at center,#160d05 0%,#000 80%);
+  }
+  svg#scene{
     width:min(100vw, 160vh);
     height:min(62.5vw, 100vh);
-    cursor:pointer;
-    box-shadow:0 0 60px rgba(0,0,0,.9), 0 0 0 2px #221408;
+    background:#0a0604;
+    box-shadow:0 0 80px rgba(0,0,0,.9), 0 0 0 1px #2a1d10;
+    display:block;
   }
-  #title{
-    position:absolute;top:1.4vh;left:50%;transform:translateX(-50%);
-    color:#c8a878;font-size:clamp(9px,1.2vw,14px);letter-spacing:.32em;
-    text-transform:uppercase;z-index:10;text-shadow:1px 1px 0 #000;pointer-events:none;
-    white-space:nowrap;
-  }
-  #hint{
-    position:absolute;bottom:1.4vh;left:50%;transform:translateX(-50%);
-    color:#7a5a32;font-size:clamp(8px,1vw,12px);letter-spacing:.28em;
-    text-transform:uppercase;z-index:10;text-shadow:1px 1px 0 #000;pointer-events:none;
-    white-space:nowrap;
+  .clickable{cursor:pointer}
+  #speech{opacity:0;transition:opacity .35s ease;pointer-events:none}
+  #speech.show{opacity:1}
+  .ringing{animation:ring .55s ease}
+  @keyframes ring{
+    0%,100%{transform:translate(0,0)}
+    20%{transform:translate(-4px,1px)}
+    40%{transform:translate(4px,1px)}
+    60%{transform:translate(-3px,0)}
+    80%{transform:translate(3px,0)}
   }
 </style>
 </head>
 <body>
-<div id="stage">
-  <canvas id="game" width="320" height="200" aria-label="Bank manager office"></canvas>
-  <div id="title">Nature Account &nbsp;·&nbsp; Molotov Alva, Bank Manager</div>
-  <div id="hint">Click the red button</div>
+<div id="frame">
+<svg id="scene" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid meet" aria-label="Isometric bank manager office">
+  <defs>
+    <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8d0a2"/>
+      <stop offset="1" stop-color="#a48656"/>
+    </linearGradient>
+    <linearGradient id="wallGdark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c0a370"/>
+      <stop offset="1" stop-color="#80683e"/>
+    </linearGradient>
+    <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a4f2c"/>
+      <stop offset="1" stop-color="#3a1f0a"/>
+    </linearGradient>
+    <linearGradient id="brass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f5dc94"/>
+      <stop offset=".5" stop-color="#c8a44a"/>
+      <stop offset="1" stop-color="#7a5e1a"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf3df"/>
+      <stop offset="1" stop-color="#e6d6b0"/>
+    </linearGradient>
+    <linearGradient id="deskTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9b5a2e"/>
+      <stop offset="1" stop-color="#5a3216"/>
+    </linearGradient>
+    <linearGradient id="deskFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a3a1a"/>
+      <stop offset="1" stop-color="#2a1808"/>
+    </linearGradient>
+    <linearGradient id="deskSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3a1f0a"/>
+      <stop offset="1" stop-color="#5a3216"/>
+    </linearGradient>
+    <radialGradient id="bellG" cx=".35" cy=".25" r=".85">
+      <stop offset="0" stop-color="#ff9292"/>
+      <stop offset=".4" stop-color="#d23030"/>
+      <stop offset="1" stop-color="#5a0e0e"/>
+    </radialGradient>
+    <radialGradient id="globeG" cx=".4" cy=".35" r=".7">
+      <stop offset="0" stop-color="#8ec2dc"/>
+      <stop offset=".6" stop-color="#3478a8"/>
+      <stop offset="1" stop-color="#143a5c"/>
+    </radialGradient>
+    <radialGradient id="skinG" cx=".4" cy=".3" r=".8">
+      <stop offset="0" stop-color="#f3d7af"/>
+      <stop offset=".7" stop-color="#dcb487"/>
+      <stop offset="1" stop-color="#a8784c"/>
+    </radialGradient>
+    <radialGradient id="beardG" cx=".5" cy=".2" r=".9">
+      <stop offset="0" stop-color="#fbfaf3"/>
+      <stop offset=".7" stop-color="#ebe5d4"/>
+      <stop offset="1" stop-color="#bdb59e"/>
+    </radialGradient>
+    <radialGradient id="lightPool" cx=".5" cy=".25" r=".7">
+      <stop offset="0" stop-color="rgba(255,225,160,0.35)"/>
+      <stop offset="1" stop-color="rgba(255,225,160,0)"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx=".5" cy=".5" r=".9">
+      <stop offset=".55" stop-color="rgba(0,0,0,0)"/>
+      <stop offset="1" stop-color="rgba(0,0,0,.7)"/>
+    </radialGradient>
+    <filter id="frameShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="3" dy="6" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10"/>
+      <feOffset dx="0" dy="12" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".4"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g id="root"></g>
+  <!-- light pool & vignette overlays handled in JS so they sit on top -->
+</svg>
 </div>
+
 <script>
-(() => {
-  const W = 320, H = 200;
-  const cv = document.getElementById('game');
-  const ctx = cv.getContext('2d');
-  ctx.imageSmoothingEnabled = false;
+const NS='http://www.w3.org/2000/svg';
+const root=document.getElementById('root');
+function el(tag,attrs,parent){
+  const e=document.createElementNS(NS,tag);
+  for(const k in (attrs||{})) e.setAttribute(k,attrs[k]);
+  (parent||root).appendChild(e);
+  return e;
+}
+function poly(pts,attrs,parent){
+  return el('polygon',{...(attrs||{}),points:pts.map(p=>p.join(',')).join(' ')},parent);
+}
 
-  const C = {
-    wall:'#cdb085', wallDk:'#a48662', wallLn:'#8a6a44', baseboard:'#5a3a1c',
-    floor:'#5b3a1e', floorDk:'#3d2511', floorLt:'#7a4f2c',
-    deskTop:'#5a3216', deskFront:'#3e2210', deskTrim:'#7a4422', deskHi:'#8a5028',
-    paper:'#f1e8d8', paperShd:'#cdbf9c',
-    black:'#1a1a1a', ink:'#2a2118',
-    red:'#a52323', redDk:'#6e1414', redHi:'#e84b4b',
-    green:'#3b6a2c', greenDk:'#1f3d18', greenLt:'#69a04a',
-    sky:'#8db8d4', sun:'#f4d486',
-    globeB:'#3478a8', globeL:'#4d9450', globeS:'#1d4a70',
-    base:'#3a2515',
-    calcBg:'#dadada', calcKey:'#2a2a2a', calcScreen:'#9fb89f',
-    skin:'#dca77a', skinShd:'#a87248', hair:'#1f1209',
-    suit:'#1d2c3c', suitShd:'#0f1a26', shirt:'#e8e2d2', tie:'#8a1c1c', tieShd:'#5a0e0e',
-    gold:'#caa44a', goldDk:'#8a6e22',
-    door:'#6e4322', doorDk:'#3a2110', doorHi:'#946238', knob:'#caa44a',
-    glow:'rgba(255,210,140,0.15)',
-  };
+/* ----- ISOMETRIC PROJECTION -----
+   World axes:
+     d = depth into room (0 = front, +d = back wall)
+     w = position along back wall  (0 = right wall, +w = left edge)
+     h = height up from floor
+   Screen mapping (2:1 isometric):
+     x = OX + (d - w) * CX
+     y = OY - (d + w) * CY - h * S
+*/
+const OX=820, OY=792, S=0.7;
+const CX=0.866*S, CY=0.5*S;
+function iso(d,w,h=0){
+  return [OX+(d-w)*CX, OY-(d+w)*CY-h*S];
+}
 
-  const rect = (c, x, y, w, h) => { ctx.fillStyle = c; ctx.fillRect(x|0, y|0, w|0, h|0); };
-  const px   = (c, x, y)       => rect(c, x, y, 1, 1);
+const DEPTH=700, WIDTH=900, HEIGHT=300;
 
-  // ===== Background: wall + floor =====
-  function drawRoom() {
-    rect(C.wall, 0, 0, W, 142);
-    for (let i = 0; i < W; i += 14) rect(C.wallDk, i, 0, 1, 142);
-    for (let i = 0; i < W; i += 28) rect(C.wallLn, i + 7, 0, 1, 142);
-    rect(C.wallDk, 0, 136, W, 2);
-    rect(C.baseboard, 0, 138, W, 6);
-
-    rect(C.floor, 0, 144, W, H - 144);
-    rect(C.floorLt, 0, 144, W, 1);
-    for (let i = 0; i < 6; i++) rect(C.floorDk, 0, 152 + i * 9, W, 1);
-    for (let i = 0; i < W; i += 32) rect(C.floorDk, i, 144, 1, H - 144);
-
-    // overhead warm light pool
-    const grd = ctx.createRadialGradient(160, 90, 10, 160, 110, 180);
-    grd.addColorStop(0, 'rgba(255,220,160,0.22)');
-    grd.addColorStop(1, 'rgba(255,220,160,0)');
-    ctx.fillStyle = grd; ctx.fillRect(0, 0, W, H);
-  }
-
-  // ===== Amazon framed picture (left wall) =====
-  function drawAmazon() {
-    const fx = 12, fy = 22, fw = 74, fh = 50;
-    rect(C.goldDk, fx - 2, fy - 2, fw + 4, fh + 4);
-    rect(C.gold,   fx - 1, fy - 1, fw + 2, fh + 2);
-    rect(C.deskFront, fx, fy, fw, fh);
-
-    // sky
-    rect(C.sky, fx + 3, fy + 3, fw - 6, 14);
-    // sun
-    rect(C.sun, fx + fw - 16, fy + 6, 5, 5);
-    rect('#f8e3a6', fx + fw - 15, fy + 7, 3, 3);
-    // back canopy
-    rect(C.greenDk, fx + 3, fy + 14, fw - 6, 10);
-    for (let i = 0; i < 9; i++) {
-      rect(C.green, fx + 3 + i * 8, fy + 12, 5, 6);
-      rect(C.greenLt, fx + 4 + i * 8, fy + 11, 2, 2);
-    }
-    // mid ground
-    rect('#274017', fx + 3, fy + 22, fw - 6, fh - 26);
-    // river
-    rect('#4d83a8', fx + 6, fy + 30, fw - 12, 4);
-    rect('#6ea3c5', fx + 8, fy + 31, fw - 16, 1);
-    // foreground trees
-    for (let i = 0; i < 5; i++) {
-      const tx = fx + 6 + i * 13;
-      rect('#2a1808', tx, fy + 22, 2, 18);
-      rect(C.green,    tx - 3, fy + 18, 8, 7);
-      rect(C.greenDk,  tx - 2, fy + 16, 6, 5);
-      rect(C.greenLt,  tx - 1, fy + 17, 2, 2);
-    }
-    // bird silhouette
-    rect(C.black, fx + 28, fy + 8, 1, 1);
-    rect(C.black, fx + 27, fy + 7, 1, 1);
-    rect(C.black, fx + 29, fy + 7, 1, 1);
-
-    // brass plaque
-    rect(C.goldDk, fx + 18, fy + fh + 2, 38, 5);
-    rect(C.gold,   fx + 18, fy + fh + 2, 38, 1);
-    ctx.fillStyle = C.black;
-    ctx.font = '5px monospace';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'center';
-    ctx.fillText('AMAZONIA', fx + 37, fy + fh + 3);
-    ctx.textAlign = 'left';
-  }
-
-  // ===== "APPLY FOR EXTRACTION" sign =====
-  function drawApplySign() {
-    const sx = 100, sy = 26, sw = 76, sh = 30;
-    rect(C.deskFront, sx - 2, sy - 2, sw + 4, sh + 4);
-    rect(C.deskTrim,  sx - 1, sy - 1, sw + 2, sh + 2);
-    rect(C.paper, sx, sy, sw, sh);
-    // double frame line
-    rect(C.black, sx + 2, sy + 2, sw - 4, 1);
-    rect(C.black, sx + 2, sy + sh - 3, sw - 4, 1);
-
-    ctx.fillStyle = C.black;
-    ctx.textBaseline = 'top';
-    ctx.font = 'bold 8px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('APPLY FOR', sx + sw / 2, sy + 6);
-    ctx.fillText('EXTRACTION', sx + sw / 2, sy + 16);
-    ctx.textAlign = 'left';
-    // red stamp
-    ctx.save();
-    ctx.translate(sx + sw - 16, sy + sh - 10);
-    ctx.rotate(-0.25);
-    ctx.fillStyle = C.red;
-    ctx.fillRect(-10, -3, 20, 7);
-    ctx.fillStyle = C.paper;
-    ctx.font = 'bold 4px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('APPROVED', 0, -1);
-    ctx.restore();
-    ctx.textAlign = 'left';
-  }
-
-  // ===== Hexagon "Outcomes" poster (right wall) =====
-  function hexPath(cx, cy, r) {
-    ctx.beginPath();
-    for (let a = 0; a < 6; a++) {
-      const ang = a * Math.PI / 3 - Math.PI / 2;
-      const x = cx + Math.cos(ang) * r;
-      const y = cy + Math.sin(ang) * r;
-      if (!a) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-  }
-
-  function drawHexIcon(idx, cx, cy) {
-    ctx.fillStyle = C.black;
-    if (idx === 0) { // AIR — wind lines
-      rect(C.black, cx - 5, cy - 2, 6, 1);
-      rect(C.black, cx + 2, cy - 2, 2, 1);
-      rect(C.black, cx - 4, cy + 1, 4, 1);
-      rect(C.black, cx + 1, cy + 1, 3, 1);
-      rect(C.black, cx - 3, cy + 4, 5, 1);
-    } else if (idx === 1) { // WATER — droplet
-      rect(C.black, cx, cy - 4, 1, 1);
-      rect(C.black, cx - 1, cy - 3, 3, 1);
-      rect(C.black, cx - 2, cy - 1, 5, 1);
-      rect(C.black, cx - 2, cy, 1, 3);
-      rect(C.black, cx + 2, cy, 1, 3);
-      rect(C.black, cx - 1, cy + 3, 3, 1);
-    } else if (idx === 2) { // SOIL — strata + bug
-      rect(C.black, cx - 5, cy - 3, 11, 1);
-      rect(C.black, cx - 5, cy + 4, 11, 1);
-      rect(C.black, cx - 3, cy, 2, 1); // bug
-      rect(C.black, cx, cy + 1, 3, 1);
-      rect(C.black, cx + 4, cy - 1, 1, 1);
-    } else if (idx === 3) { // BIODIVERSITY — bird + leaves
-      rect(C.black, cx - 1, cy - 2, 4, 3);
-      rect(C.black, cx + 3, cy - 1, 1, 1);
-      rect(C.black, cx - 2, cy + 1, 2, 1);
-      rect(C.black, cx - 4, cy - 3, 2, 1); // bee
-      rect(C.black, cx - 4, cy + 3, 3, 1); // leaf
-      rect(C.black, cx + 3, cy + 3, 2, 1);
-    } else if (idx === 4) { // EQUITY — farmer + furrows
-      rect(C.black, cx + 1, cy - 3, 3, 3);  // head
-      rect(C.black, cx, cy - 4, 5, 1);      // hat
-      rect(C.black, cx - 5, cy + 1, 11, 1); // ground
-      rect(C.black, cx - 4, cy + 3, 9, 1);
-    } else if (idx === 5) { // CARBON — CO2 letters
-      ctx.font = 'bold 5px monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = C.black;
-      ctx.fillText('CO2', cx, cy + 1);
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
-    }
-  }
-
-  function drawHexPoster() {
-    const pw = 100, ph = 76, p0x = 208, p0y = 16;
-    rect(C.deskFront, p0x - 2, p0y - 2, pw + 4, ph + 4);
-    rect(C.deskTrim, p0x - 1, p0y - 1, pw + 2, ph + 2);
-    rect(C.paper, p0x, p0y, pw, ph);
-
-    // tiny top label
-    ctx.fillStyle = C.black;
-    ctx.textBaseline = 'top';
-    ctx.font = 'bold 4px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('OUTCOMES', p0x + pw / 2, p0y + 3);
-
-    const labels = ['AIR','WATER','SOIL','BIODIVERSITY','EQUITY','CARBON'];
-    const cols = 3, rows = 2;
-    const cellW = pw / cols, cellH = (ph - 12) / rows;
-    for (let i = 0; i < 6; i++) {
-      const c = i % cols, r = Math.floor(i / cols);
-      const cx = p0x + cellW * c + cellW / 2;
-      const cy = p0y + 12 + cellH * r + cellH / 2 - 4;
-      ctx.fillStyle = C.paper;
-      hexPath(cx, cy, 10); ctx.fill();
-      ctx.strokeStyle = C.black; ctx.lineWidth = 1;
-      hexPath(cx, cy, 10); ctx.stroke();
-      drawHexIcon(i, cx, cy);
-      ctx.fillStyle = C.black;
-      ctx.font = '3px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(labels[i], cx, cy + 12);
-    }
-    ctx.textAlign = 'left';
-  }
-
-  // ===== Door =====
-  function drawDoor() {
-    const dx = 272, dy = 78, dw = 40, dh = 80;
-    // frame
-    rect(C.doorDk, dx - 3, dy - 3, dw + 6, dh + 3);
-    // door
-    rect(C.door, dx, dy, dw, dh);
-    rect(C.doorHi, dx, dy, dw, 1);
-    rect(C.doorHi, dx, dy, 1, dh);
-    rect(C.doorDk, dx + dw - 1, dy, 1, dh);
-    rect(C.doorDk, dx, dy + dh - 1, dw, 1);
-    // panels
-    rect(C.doorDk, dx + 4,  dy + 6,  dw - 8, 22);
-    rect(C.door,   dx + 6,  dy + 8,  dw - 12, 18);
-    rect(C.doorDk, dx + 4,  dy + 32, dw - 8, 32);
-    rect(C.door,   dx + 6,  dy + 34, dw - 12, 28);
-    // knob
-    rect(C.knob,   dx + dw - 8, dy + 44, 3, 3);
-    rect(C.goldDk, dx + dw - 8, dy + 47, 3, 1);
-
-    // GO OUTSIDE sign above door
-    const sx = dx - 2, sy = dy - 16, sw = dw + 4, sh = 11;
-    rect(C.deskFront, sx - 1, sy - 1, sw + 2, sh + 2);
-    rect(C.paper, sx, sy, sw, sh);
-    ctx.fillStyle = C.black;
-    ctx.font = 'bold 6px monospace';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'center';
-    ctx.fillText('GO OUTSIDE', sx + sw / 2, sy + 3);
-    ctx.textAlign = 'left';
-
-    // EXIT arrow on door
-    ctx.fillStyle = C.paper;
-    ctx.font = 'bold 4px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('→', dx + dw / 2, dy + 70);
-    ctx.textAlign = 'left';
-  }
-
-  // ===== Desk =====
-  function drawDesk() {
-    // desk top
-    rect(C.deskTop, 0, 108, W, 8);
-    rect(C.deskHi, 0, 108, W, 1);
-    // desk front
-    rect(C.deskFront, 0, 116, W, 28);
-    // panels / drawers
-    rect(C.deskTrim, 24, 122, 60, 18);
-    rect(C.deskTrim, 100, 122, 60, 18);
-    rect(C.deskTrim, 176, 122, 60, 18);
-    rect(C.deskTrim, 252, 122, 60, 18);
-    // drawer pulls
-    for (let i = 0; i < 4; i++) {
-      rect(C.gold, 28 + i * 76, 131, 4, 2);
-      rect(C.goldDk, 28 + i * 76, 132, 4, 1);
-    }
-    // edge highlight
-    rect(C.deskHi, 0, 116, W, 1);
-  }
-
-  // ===== Globe =====
-  function drawGlobe() {
-    const gx = 50, gy = 102;
-    // base
-    rect(C.base, gx - 2, gy + 8, 14, 2);
-    rect(C.base, gx + 2, gy + 4, 6, 4);
-    // sphere
-    ctx.fillStyle = C.globeB;
-    ctx.beginPath(); ctx.arc(gx + 5, gy + 2, 7, 0, Math.PI * 2); ctx.fill();
-    // continents
-    ctx.fillStyle = C.globeL;
-    rect(C.globeL, gx + 2, gy - 1, 3, 4);
-    rect(C.globeL, gx + 6, gy + 2, 4, 3);
-    rect(C.globeL, gx + 3, gy + 4, 2, 2);
-    // meridian
-    ctx.strokeStyle = C.gold; ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.ellipse(gx + 5, gy + 2, 8, 8, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    // shadow
-    ctx.fillStyle = C.globeS;
-    ctx.beginPath(); ctx.arc(gx + 9, gy + 4, 2, 0, Math.PI * 2); ctx.fill();
-    // axis pin
-    rect(C.gold, gx + 4, gy - 6, 2, 2);
-  }
-
-  // ===== Calculator =====
-  function drawCalc() {
-    const ax = 230, ay = 100;
-    rect(C.calcBg, ax, ay, 28, 16);
-    rect('#a8a8a8', ax, ay + 15, 28, 1);
-    rect('#a8a8a8', ax + 27, ay, 1, 16);
-    // screen
-    rect(C.calcScreen, ax + 2, ay + 2, 24, 4);
-    ctx.fillStyle = C.black;
-    ctx.font = '3px monospace';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'right';
-    ctx.fillText('-12000.00', ax + 25, ay + 2);
-    ctx.textAlign = 'left';
-    // keys
-    for (let r = 0; r < 3; r++) {
-      for (let c = 0; c < 5; c++) {
-        rect(C.calcKey, ax + 2 + c * 5, ay + 7 + r * 3, 4, 2);
-      }
-    }
-  }
-
-  // ===== Name plate =====
-  function drawNamePlate() {
-    const nx = 124, ny = 110, nw = 72, nh = 9;
-    rect(C.goldDk, nx, ny, nw, nh);
-    rect(C.gold,   nx, ny, nw, 1);
-    rect(C.gold,   nx, ny, 1, nh);
-    rect(C.black, nx + 2, ny + 2, nw - 4, nh - 4);
-    ctx.fillStyle = C.gold;
-    ctx.font = 'bold 6px monospace';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'center';
-    ctx.fillText('MOLOTOV ALVA', nx + nw / 2, ny + 2);
-    ctx.textAlign = 'left';
-  }
-
-  // ===== Service-bell / "ASK TO GO OUTSIDE" button =====
-  let askBtnHit = null;
-  function drawAskButton(highlight) {
-    const bx = 32, by = 118, bw = 64, bh = 20;
-    askBtnHit = { x: bx, y: by, w: bw, h: bh };
-    // base
-    rect(C.black, bx, by + bh - 3, bw, 3);
-    rect('#3a2008', bx + 1, by + bh - 4, bw - 2, 1);
-    // body
-    rect(C.redDk, bx, by, bw, bh - 3);
-    rect(highlight ? C.redHi : C.red, bx + 1, by + 1, bw - 2, bh - 5);
-    rect(C.redHi, bx + 2, by + 2, bw - 4, 1);
-    // label
-    ctx.fillStyle = C.paper;
-    ctx.font = 'bold 7px monospace';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'center';
-    ctx.fillText('ASK TO GO', bx + bw / 2, by + 3);
-    ctx.fillText('OUTSIDE', bx + bw / 2, by + 10);
-    ctx.textAlign = 'left';
-  }
-
-  // ===== Bank manager =====
-  function drawManager(blink) {
-    const mx = 160;
-    // shoulders / jacket
-    rect(C.suit, mx - 26, 96, 52, 14);
-    rect(C.suitShd, mx - 26, 96, 52, 2);
-    rect(C.suitShd, mx - 26, 96, 4, 14);
-    rect(C.suitShd, mx + 22, 96, 4, 14);
-    // shirt v
-    rect(C.shirt, mx - 5, 98, 10, 12);
-    rect(C.suit, mx - 4, 100, 8, 6);
-    rect(C.suit, mx - 3, 102, 6, 4);
-    // tie
-    rect(C.tie, mx - 1, 100, 2, 10);
-    rect(C.tieShd, mx, 100, 1, 10);
-    // neck
-    rect(C.skin, mx - 3, 92, 6, 6);
-    rect(C.skinShd, mx - 3, 96, 6, 2);
-    // head
-    rect(C.skin, mx - 8, 74, 16, 20);
-    // jaw shadow
-    rect(C.skinShd, mx - 8, 90, 16, 2);
-    // hair
-    rect(C.hair, mx - 8, 70, 16, 5);
-    rect(C.hair, mx - 8, 70, 2, 14);
-    rect(C.hair, mx + 6, 70, 2, 14);
-    rect(C.hair, mx - 7, 74, 14, 1);
-    // ears
-    rect(C.skin, mx - 9, 80, 2, 4);
-    rect(C.skin, mx + 7, 80, 2, 4);
-    rect(C.skinShd, mx - 9, 82, 1, 2);
-    rect(C.skinShd, mx + 8, 82, 1, 2);
-    // glasses frames
-    rect(C.black, mx - 6, 80, 5, 4);
-    rect(C.black, mx + 1, 80, 5, 4);
-    rect(C.black, mx - 1, 81, 2, 1); // bridge
-    // glasses lenses
-    rect('#c4d4e0', mx - 5, 81, 3, 2);
-    rect('#c4d4e0', mx + 2, 81, 3, 2);
-    // pupils
-    if (!blink) {
-      rect(C.black, mx - 4, 81, 1, 1);
-      rect(C.black, mx + 3, 81, 1, 1);
-    } else {
-      rect(C.black, mx - 5, 82, 3, 1);
-      rect(C.black, mx + 2, 82, 3, 1);
-    }
-    // brow
-    rect(C.hair, mx - 6, 79, 5, 1);
-    rect(C.hair, mx + 1, 79, 5, 1);
-    // nose
-    rect(C.skinShd, mx, 84, 1, 4);
-    rect(C.skinShd, mx - 1, 87, 3, 1);
-    // mouth — flat line
-    rect(C.ink, mx - 3, 90, 7, 1);
-    // moustache hint
-    rect(C.hair, mx - 3, 88, 7, 1);
-    // pocket square
-    rect(C.paper, mx - 22, 100, 5, 2);
-  }
-
-  // ===== Speech bubble =====
-  let speech = null; // { lines, until, fromX, fromY }
-  function drawSpeech() {
-    if (!speech) return;
-    if (performance.now() > speech.until) { speech = null; return; }
-    const lines = speech.lines;
-    const padX = 4, padY = 3, lineH = 7;
-    const charW = 4;
-    const maxLen = Math.max(...lines.map(l => l.length));
-    const bw = maxLen * charW + padX * 2;
-    const bh = lines.length * lineH + padY * 2;
-    let bx = 90;
-    const by = 16;
-
-    // shadow
-    rect('rgba(0,0,0,0.45)', bx + 3, by + 3, bw, bh);
-    // bubble
-    rect(C.paper, bx, by, bw, bh);
-    // borders
-    rect(C.black, bx, by, bw, 1);
-    rect(C.black, bx, by + bh - 1, bw, 1);
-    rect(C.black, bx, by, 1, bh);
-    rect(C.black, bx + bw - 1, by, 1, bh);
-
-    // tail (pointing down-right toward manager head ~160,82)
-    const tx = bx + bw - 22, ty = by + bh;
-    rect(C.paper, tx, ty, 8, 2);
-    rect(C.paper, tx + 2, ty + 2, 6, 2);
-    rect(C.paper, tx + 4, ty + 4, 4, 2);
-    rect(C.paper, tx + 6, ty + 6, 2, 2);
-    rect(C.black, tx, ty, 1, 2);
-    rect(C.black, tx + 1, ty + 2, 1, 1);
-    rect(C.black, tx + 3, ty + 4, 1, 1);
-    rect(C.black, tx + 5, ty + 6, 1, 1);
-    rect(C.black, tx + 7, ty, 1, 1);
-    rect(C.black, tx + 7, ty + 1, 1, 1);
-    rect(C.black, tx + 7, ty + 2, 1, 2);
-    rect(C.black, tx + 7, ty + 4, 1, 2);
-    rect(C.black, tx + 7, ty + 6, 1, 2);
-
-    // text
-    ctx.fillStyle = C.black;
-    ctx.font = 'bold 6px monospace';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'left';
-    lines.forEach((l, i) => ctx.fillText(l, bx + padX, by + padY + i * lineH));
-  }
-
-  // ===== Stack: build the full scene =====
-  let blinking = false, hover = false;
-  function render() {
-    rect(C.black, 0, 0, W, H);
-    drawRoom();
-    drawAmazon();
-    drawApplySign();
-    drawHexPoster();
-    drawDoor();
-    drawDesk();
-    drawManager(blinking);
-    drawNamePlate();
-    drawGlobe();
-    drawCalc();
-    drawAskButton(hover);
-    drawSpeech();
-
-    // soft vignette
-    const g = ctx.createRadialGradient(160, 100, 80, 160, 100, 200);
-    g.addColorStop(0, 'rgba(0,0,0,0)');
-    g.addColorStop(1, 'rgba(0,0,0,0.55)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  }
-
-  // ===== Interaction =====
-  function canvasCoords(evt) {
-    const r = cv.getBoundingClientRect();
-    const sx = W / r.width, sy = H / r.height;
-    return { x: (evt.clientX - r.left) * sx, y: (evt.clientY - r.top) * sy };
-  }
-  function inRect(p, b) {
-    return p.x >= b.x && p.x <= b.x + b.w && p.y >= b.y && p.y <= b.y + b.h;
-  }
-
-  const doorHit = { x: 270, y: 78, w: 44, h: 80 };
-
-  function trigger() {
-    speech = {
-      lines: ['Sorry, but your', 'Nature Account is', '12,000 overdrawn.'],
-      until: performance.now() + 7000,
-    };
-  }
-
-  cv.addEventListener('mousemove', e => {
-    const p = canvasCoords(e);
-    const wasHover = hover;
-    hover = (askBtnHit && inRect(p, askBtnHit)) || inRect(p, doorHit);
-    cv.style.cursor = hover ? 'pointer' : 'crosshair';
-    if (wasHover !== hover) render();
-  });
-  cv.addEventListener('click', e => {
-    const p = canvasCoords(e);
-    if ((askBtnHit && inRect(p, askBtnHit)) || inRect(p, doorHit)) {
-      trigger();
-      render();
-    }
-  });
-
-  // blink loop
-  setInterval(() => {
-    blinking = true; render();
-    setTimeout(() => { blinking = false; render(); }, 140);
-  }, 4200);
-
-  // speech fade out tick
-  setInterval(() => { if (speech) render(); }, 200);
-
-  render();
+// Wall transforms: map local 2D coords (lx, ly) into the wall plane.
+// Back wall (at d=DEPTH): local origin = camera-top-left corner of wall.
+//   local +x → camera right (decreasing w in world)
+//   local +y → camera down  (decreasing h in world)
+const BWT = (()=>{ // matrix(a b c d e f)
+  const a=CX, b=CY, c=0, d=S;
+  const e=OX+(DEPTH-WIDTH)*CX;
+  const f=OY-(DEPTH+WIDTH)*CY-HEIGHT*S;
+  return `matrix(${a} ${b} ${c} ${d} ${e} ${f})`;
 })();
+// Right wall (at w=0): local origin = camera-top-left = front-top corner of right wall.
+//   local +x → camera right (increasing d)
+//   local +y → camera down  (decreasing h)
+const RWT = (()=>{
+  const a=CX, b=-CY, c=0, d=S;
+  const e=OX;
+  const f=OY-HEIGHT*S;
+  return `matrix(${a} ${b} ${c} ${d} ${e} ${f})`;
+})();
+
+/* =================================================================
+   1. FLOOR
+================================================================= */
+{
+  const corners=[iso(0,0),iso(DEPTH,0),iso(DEPTH,WIDTH),iso(0,WIDTH)];
+  poly(corners,{fill:'url(#floorG)'});
+  // floor tile grid
+  const grid=el('g',{stroke:'#22150a','stroke-width':1.5,opacity:.45});
+  for(let d=100;d<DEPTH;d+=100){
+    const a=iso(d,0),b=iso(d,WIDTH);
+    el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1]},grid);
+  }
+  for(let w=100;w<WIDTH;w+=100){
+    const a=iso(0,w),b=iso(DEPTH,w);
+    el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1]},grid);
+  }
+  // floor edge highlight along the front
+  const front=[iso(0,0),iso(0,WIDTH)];
+  el('line',{x1:front[0][0],y1:front[0][1],x2:front[1][0],y2:front[1][1],
+             stroke:'#1a0d04','stroke-width':2.5});
+}
+
+/* =================================================================
+   2. BACK WALL (with sheared items)
+================================================================= */
+{
+  const corners=[iso(DEPTH,0,0),iso(DEPTH,WIDTH,0),iso(DEPTH,WIDTH,HEIGHT),iso(DEPTH,0,HEIGHT)];
+  poly(corners,{fill:'url(#wallG)'});
+
+  const g=el('g',{transform:BWT});
+  // wainscoting band along bottom
+  el('rect',{x:0,y:HEIGHT-50,width:WIDTH,height:50,fill:'#7a5530'},g);
+  el('rect',{x:0,y:HEIGHT-50,width:WIDTH,height:3,fill:'#42260e'},g);
+  el('rect',{x:0,y:HEIGHT-3,width:WIDTH,height:3,fill:'#42260e'},g);
+
+  // ----- HEX POSTER (camera-left, smallest x in local) -----
+  {
+    const x=60,y=30,w=200,h=210;
+    el('rect',{x:x-4,y:y-4,width:w+8,height:h+8,fill:'#3a1f0a'},g);
+    el('rect',{x,y,width:w,height:h,fill:'url(#paper)'},g);
+    el('text',{x:x+w/2,y:y+18,'text-anchor':'middle','font-family':'Georgia,serif','font-size':12,'font-weight':'bold','letter-spacing':4,fill:'#1a1008'},g).textContent='OUTCOMES';
+    // 3 cols x 2 rows hex grid
+    const labels=['AIR','WATER','SOIL','BIODIVRSTY','EQUITY','CARBON'];
+    const cellW=w/3, cellH=(h-30)/2;
+    for(let i=0;i<6;i++){
+      const c=i%3,r=Math.floor(i/3);
+      const cx=x+cellW*c+cellW/2;
+      const cy=y+24+cellH*r+cellH/2-6;
+      const R=24;
+      const pts=[];
+      for(let k=0;k<6;k++){
+        const ang=k*Math.PI/3-Math.PI/2;
+        pts.push([cx+Math.cos(ang)*R,cy+Math.sin(ang)*R]);
+      }
+      poly(pts,{fill:'#fbf3df',stroke:'#1a1008','stroke-width':2},g);
+      // mini icon (centered glyph instead of pixel icon)
+      const glyphs=['~','◇','≡','✿','♢','C₂'];
+      el('text',{x:cx,y:cy+5,'text-anchor':'middle','font-family':'Georgia,serif','font-size':16,'font-weight':'bold',fill:'#1a1008'},g).textContent=glyphs[i];
+      el('text',{x:cx,y:cy+R+12,'text-anchor':'middle','font-family':'Georgia,serif','font-size':9,'font-weight':'bold','letter-spacing':1.5,fill:'#1a1008'},g).textContent=labels[i];
+    }
+  }
+
+  // ----- APPLY FOR EXTRACTION sign (center) -----
+  {
+    const x=320,y=60,w=270,h=150;
+    el('rect',{x:x-4,y:y-4,width:w+8,height:h+8,fill:'#3a1f0a'},g);
+    el('rect',{x,y,width:w,height:h,fill:'url(#paper)'},g);
+    el('rect',{x:x+10,y:y+10,width:w-20,height:2,fill:'#3a1f0a'},g);
+    el('rect',{x:x+10,y:y+h-12,width:w-20,height:2,fill:'#3a1f0a'},g);
+    el('text',{x:x+w/2,y:y+62,'text-anchor':'middle','font-family':'Georgia,serif','font-size':30,'font-weight':'bold','letter-spacing':6,fill:'#1a1008'},g).textContent='APPLY FOR';
+    el('text',{x:x+w/2,y:y+100,'text-anchor':'middle','font-family':'Georgia,serif','font-size':30,'font-weight':'bold','letter-spacing':6,fill:'#1a1008'},g).textContent='EXTRACTION';
+    // APPROVED stamp
+    const sg=el('g',{transform:`translate(${x+w-50} ${y+h-30}) rotate(-14)`},g);
+    el('rect',{x:-60,y:-22,width:120,height:40,fill:'none',stroke:'#a52323','stroke-width':3.5},sg);
+    el('text',{x:0,y:6,'text-anchor':'middle','font-family':'Georgia,serif','font-size':18,'font-weight':'bold','letter-spacing':3,fill:'#a52323'},sg).textContent='APPROVED';
+  }
+
+  // ----- AMAZON framed painting (camera-right) -----
+  {
+    const x=620,y=30,w=240,h=200;
+    el('rect',{x:x-4,y:y-4,width:w+8,height:h+8,fill:'url(#brass)'},g);
+    el('rect',{x:x+4,y:y+4,width:w-8,height:h-8,fill:'#1a0d04'},g);
+    // sky
+    el('rect',{x:x+8,y:y+8,width:w-16,height:38,fill:'#9bc4d8'},g);
+    el('circle',{cx:x+w-30,cy:y+22,r:14,fill:'#f8d486'},g);
+    el('circle',{cx:x+w-30,cy:y+22,r:9,fill:'#fae6a6'},g);
+    // back canopy band
+    el('rect',{x:x+8,y:y+40,width:w-16,height:30,fill:'#1f3d18'},g);
+    for(let i=0;i<7;i++){
+      el('ellipse',{cx:x+18+i*32,cy:y+38,rx:18,ry:12,fill:'#3b6a2c'},g);
+      el('ellipse',{cx:x+22+i*32,cy:y+34,rx:8,ry:5,fill:'#69a04a'},g);
+    }
+    // ground
+    el('rect',{x:x+8,y:y+62,width:w-16,height:h-72,fill:'#274017'},g);
+    // river
+    el('path',{d:`M ${x+10} ${y+78} Q ${x+w/2} ${y+74} ${x+w-10} ${y+82} L ${x+w-10} ${y+88} Q ${x+w/2} ${y+82} ${x+10} ${y+86} Z`,fill:'#4d83a8'},g);
+    // trees
+    for(let i=0;i<5;i++){
+      const tx=x+22+i*42;
+      el('rect',{x:tx,y:y+98,width:5,height:42,fill:'#2a1808'},g);
+      el('ellipse',{cx:tx+2,cy:y+90,rx:18,ry:14,fill:'#3b6a2c'},g);
+      el('ellipse',{cx:tx+2,cy:y+82,rx:12,ry:8,fill:'#69a04a'},g);
+    }
+    // bird
+    el('path',{d:`M ${x+170} ${y+24} q 4 -6 8 0 q 4 -6 8 0`,stroke:'#1a1208','stroke-width':1.8,fill:'none'},g);
+    // plaque
+    el('rect',{x:x+w/2-50,y:y+h+6,width:100,height:18,fill:'url(#brass)'},g);
+    el('text',{x:x+w/2,y:y+h+19,'text-anchor':'middle','font-family':'Georgia,serif','font-size':11,'font-weight':'bold','letter-spacing':4,fill:'#3a1f0a'},g).textContent='AMAZONIA';
+  }
+}
+
+/* =================================================================
+   3. RIGHT WALL (with door)
+================================================================= */
+{
+  const corners=[iso(0,0,0),iso(DEPTH,0,0),iso(DEPTH,0,HEIGHT),iso(0,0,HEIGHT)];
+  poly(corners,{fill:'url(#wallGdark)'});
+  poly(corners,{fill:'rgba(0,0,0,.18)'});
+
+  const g=el('g',{transform:RWT});
+  // wainscoting
+  el('rect',{x:0,y:HEIGHT-50,width:DEPTH,height:50,fill:'#5e431f'},g);
+  el('rect',{x:0,y:HEIGHT-50,width:DEPTH,height:3,fill:'#32200a'},g);
+  el('rect',{x:0,y:HEIGHT-3,width:DEPTH,height:3,fill:'#32200a'},g);
+
+  // GO OUTSIDE sign hanging above door
+  {
+    const x=250,y=18,w=180,h=44;
+    el('rect',{x:x-3,y:y-3,width:w+6,height:h+6,fill:'#3a1f0a'},g);
+    el('rect',{x,y,width:w,height:h,fill:'url(#paper)'},g);
+    el('text',{x:x+w/2,y:y+30,'text-anchor':'middle','font-family':'Georgia,serif','font-size':22,'font-weight':'bold','letter-spacing':4,fill:'#1a1008'},g).textContent='GO OUTSIDE';
+    // hanging chain
+    el('line',{x1:x+20,y1:y,x2:x+20,y2:y-12,stroke:'#3a1f0a','stroke-width':2},g);
+    el('line',{x1:x+w-20,y1:y,x2:x+w-20,y2:y-12,stroke:'#3a1f0a','stroke-width':2},g);
+  }
+  // DOOR
+  {
+    const x=265,y=70,w=150,h=180;
+    el('rect',{x:x-4,y:y-4,width:w+8,height:h+8,fill:'#2a1808'},g);
+    el('rect',{x,y,width:w,height:h,fill:'#6e4322'},g);
+    // panels
+    el('rect',{x:x+10,y:y+10,width:w-20,height:60,fill:'#3a1f0a'},g);
+    el('rect',{x:x+14,y:y+14,width:w-28,height:52,fill:'#5a3216'},g);
+    el('rect',{x:x+10,y:y+80,width:w-20,height:90,fill:'#3a1f0a'},g);
+    el('rect',{x:x+14,y:y+84,width:w-28,height:82,fill:'#5a3216'},g);
+    // knob
+    el('circle',{cx:x+w-16,cy:y+h/2,r:5,fill:'url(#brass)',stroke:'#3a1f0a','stroke-width':1.5},g);
+    el('circle',{cx:x+w-16,cy:y+h/2,r:1.5,fill:'#3a1f0a'},g);
+  }
+  // click area
+  const dpts=[iso(450,0,0),iso(620,0,0),iso(620,0,200),iso(450,0,200)];
+  poly(dpts,{class:'clickable',id:'doorHit',fill:'transparent'});
+}
+
+/* =================================================================
+   4. CHANDELIER / LIGHT POOL (decorative ceiling glow)
+================================================================= */
+el('ellipse',{cx:780,cy:200,rx:520,ry:200,fill:'url(#lightPool)'});
+
+/* =================================================================
+   5. DARWIN (drawn before desk so desk hides his lower body)
+   Anchor: behind desk at d≈540, w≈540, drawn as a 2D billboard.
+================================================================= */
+{
+  const [ax,ay]=iso(540,540,170); // chest-level world anchor
+  const SC=0.42;
+  // The sub-SVG group is drawn in "sprite local" coords from previous version,
+  // translated so sprite point (830,540) lands at (ax,ay) under scale SC.
+  const g=el('g',{transform:`translate(${ax-830*SC} ${ay-540*SC}) scale(${SC})`});
+
+  // shoulders / Victorian frock coat
+  el('path',{d:'M 460 600 L 460 540 Q 500 460 690 450 L 970 450 Q 1160 460 1200 540 L 1200 600 Z',fill:'#0e0e0e'},g);
+  // coat highlight stripes
+  el('path',{d:'M 480 600 L 480 555 Q 510 490 580 478',stroke:'#26262a','stroke-width':3,fill:'none'},g);
+  el('path',{d:'M 1180 600 L 1180 555 Q 1150 490 1080 478',stroke:'#26262a','stroke-width':3,fill:'none'},g);
+  // lapels
+  el('path',{d:'M 700 470 L 760 530 L 830 555 L 900 530 L 960 470 L 940 475 L 880 520 L 830 540 L 780 520 L 720 475 Z',fill:'#1f1f23'},g);
+  // shirt V
+  el('path',{d:'M 780 510 L 830 580 L 880 510 L 870 510 L 830 555 L 790 510 Z',fill:'#f4efe1'},g);
+  // bow tie
+  el('path',{d:'M 800 510 Q 820 506 830 514 Q 840 506 860 510 L 854 538 Q 840 542 830 534 Q 820 542 806 538 Z',fill:'#0a0a0a'},g);
+  el('circle',{cx:830,cy:524,r:3,fill:'#1f1f23'},g);
+
+  // BEARD
+  el('path',{d:'M 650 460 Q 615 380 660 320 Q 660 280 700 270 L 960 270 Q 1000 280 1000 320 Q 1045 380 1010 460 Q 1020 560 980 620 Q 940 660 880 670 Q 830 678 780 670 Q 720 660 680 620 Q 640 560 650 460 Z',fill:'url(#beardG)'},g);
+  ['M 680 470 Q 700 540 690 620','M 740 480 Q 760 560 760 660','M 830 490 Q 830 580 830 670','M 920 480 Q 900 560 900 660','M 980 470 Q 960 540 970 620']
+    .forEach(d=>el('path',{d,stroke:'#c5bea7','stroke-width':2.5,fill:'none',opacity:.7},g));
+  el('ellipse',{cx:700,cy:600,rx:40,ry:50,fill:'url(#beardG)'},g);
+  el('ellipse',{cx:960,cy:600,rx:40,ry:50,fill:'url(#beardG)'},g);
+  el('ellipse',{cx:830,cy:660,rx:80,ry:30,fill:'url(#beardG)'},g);
+
+  // side hair tufts
+  el('ellipse',{cx:680,cy:320,rx:46,ry:86,fill:'#ece6d2'},g);
+  el('ellipse',{cx:985,cy:320,rx:46,ry:86,fill:'#ece6d2'},g);
+
+  // ears
+  el('ellipse',{cx:672,cy:345,rx:16,ry:26,fill:'url(#skinG)'},g);
+  el('ellipse',{cx:994,cy:345,rx:16,ry:26,fill:'url(#skinG)'},g);
+
+  // bald dome
+  el('ellipse',{cx:830,cy:285,rx:140,ry:170,fill:'url(#skinG)'},g);
+  el('ellipse',{cx:820,cy:170,rx:70,ry:22,fill:'#f7e6c8',opacity:.7},g);
+  el('path',{d:'M 900 180 Q 970 240 968 350 Q 945 420 900 440 Q 920 360 920 280 Q 920 220 900 180 Z',fill:'#b88c5e',opacity:.35},g);
+
+  // forehead wrinkles
+  ['M 740 240 Q 830 230 920 240','M 745 278 Q 830 268 915 278','M 760 312 Q 830 304 900 312']
+    .forEach(d=>el('path',{d,stroke:'#a07043','stroke-width':2.5,fill:'none',opacity:.55,'stroke-linecap':'round'},g));
+
+  // brows
+  el('path',{d:'M 715 348 Q 760 322 822 340 Q 825 352 818 358 Q 770 348 728 366 Q 716 364 715 348 Z',fill:'#2a1a10'},g);
+  el('path',{d:'M 945 348 Q 900 322 838 340 Q 835 352 842 358 Q 890 348 932 366 Q 944 364 945 348 Z',fill:'#2a1a10'},g);
+
+  // eye recesses + eyes
+  el('ellipse',{cx:772,cy:378,rx:32,ry:18,fill:'#9e7048',opacity:.45},g);
+  el('ellipse',{cx:888,cy:378,rx:32,ry:18,fill:'#9e7048',opacity:.45},g);
+  el('ellipse',{cx:772,cy:378,rx:9,ry:6,fill:'#fbf3df'},g);
+  el('ellipse',{cx:888,cy:378,rx:9,ry:6,fill:'#fbf3df'},g);
+  el('circle',{cx:772,cy:378,r:5,fill:'#3e2c18'},g);
+  el('circle',{cx:888,cy:378,r:5,fill:'#3e2c18'},g);
+  el('circle',{cx:772,cy:378,r:2.5,fill:'#100a04'},g);
+  el('circle',{cx:888,cy:378,r:2.5,fill:'#100a04'},g);
+  el('circle',{cx:774,cy:376,r:1.6,fill:'#fff'},g);
+  el('circle',{cx:890,cy:376,r:1.6,fill:'#fff'},g);
+  el('path',{d:'M 754 392 Q 772 404 792 392',stroke:'#a07043','stroke-width':2,fill:'none',opacity:.65},g);
+  el('path',{d:'M 870 392 Q 888 404 906 392',stroke:'#a07043','stroke-width':2,fill:'none',opacity:.65},g);
+
+  // nose
+  el('path',{d:'M 822 358 Q 814 400 808 430 Q 805 452 822 458 L 838 458 Q 855 452 852 430 Q 846 400 838 358 Z',fill:'url(#skinG)'},g);
+  el('ellipse',{cx:830,cy:438,rx:14,ry:9,fill:'#f3d7af',opacity:.7},g);
+  el('ellipse',{cx:822,cy:450,rx:3.5,ry:2.5,fill:'#7a4e2a'},g);
+  el('ellipse',{cx:838,cy:450,rx:3.5,ry:2.5,fill:'#7a4e2a'},g);
+
+  // moustache
+  el('path',{d:'M 720 450 Q 690 446 680 462 Q 678 482 712 482 Q 760 478 800 478 Q 830 478 860 478 Q 900 478 948 482 Q 982 482 980 462 Q 970 446 940 450 Q 900 460 870 458 Q 830 454 790 458 Q 760 460 720 450 Z',fill:'url(#beardG)'},g);
+}
+
+/* =================================================================
+   6. DESK (isometric 3D box)
+   Dimensions: d=200-420, w=240-860, h=0-180
+================================================================= */
+{
+  const d0=200,d1=420,w0=240,w1=860,h0=0,h1=180;
+  // visible faces: top, front (d=d0), right (w=w0)
+  // right side face
+  poly([iso(d0,w0,h0),iso(d1,w0,h0),iso(d1,w0,h1),iso(d0,w0,h1)],{fill:'url(#deskSide)'});
+  // front face
+  poly([iso(d0,w0,h0),iso(d0,w1,h0),iso(d0,w1,h1),iso(d0,w0,h1)],{fill:'url(#deskFront)'});
+  // top
+  poly([iso(d0,w0,h1),iso(d0,w1,h1),iso(d1,w1,h1),iso(d1,w0,h1)],{fill:'url(#deskTop)'});
+  // top edge highlight
+  const e1=iso(d0,w0,h1),e2=iso(d0,w1,h1),e3=iso(d1,w0,h1);
+  el('line',{x1:e1[0],y1:e1[1],x2:e2[0],y2:e2[1],stroke:'#c98050','stroke-width':2.5});
+  el('line',{x1:e1[0],y1:e1[1],x2:e3[0],y2:e3[1],stroke:'#a06036','stroke-width':2.5});
+
+  // drawer outlines (on front face) — use a clipping/translation along the front face plane
+  // Front face plane: world (d=d0, w varies, h varies). Local (u=w, v=h).
+  // Local +u maps to world +w → screen direction (-CX, -CY)
+  // Local +v maps to world +h → screen direction (0, -S)
+  const [fx,fy]=iso(d0,0,0);
+  const FFT=`matrix(${-CX} ${-CY} 0 ${-S} ${fx} ${fy})`;
+  const ff=el('g',{transform:FFT});
+  // drawer outlines in front-face local (u=w in [w0,w1]=[240,860], v=h in [0,h1=180])
+  for(let i=0;i<3;i++){
+    const u0=w0+30+i*200;
+    el('rect',{x:u0,y:30,width:170,height:120,fill:'none',stroke:'#1a0d04','stroke-width':2.5},ff);
+    el('rect',{x:u0+70,y:80,width:30,height:14,rx:3,fill:'url(#brass)',stroke:'#3a1f0a','stroke-width':1},ff);
+  }
+  // nameplate, engraved on the FRONT face of desk, centered
+  el('rect',{x:w0+200,y:14,width:240,height:46,fill:'#3a1f0a'},ff);
+  el('rect',{x:w0+204,y:18,width:232,height:38,fill:'url(#brass)'},ff);
+  el('rect',{x:w0+214,y:26,width:212,height:22,fill:'#100a04'},ff);
+  el('text',{x:w0+320,y:42,'text-anchor':'middle','font-family':'Georgia,serif','font-weight':'bold','font-size':16,'letter-spacing':6,fill:'url(#brass)'},ff).textContent='MOLOTOV ALVA';
+}
+
+/* =================================================================
+   7. ITEMS ON THE DESK TOP
+================================================================= */
+// Helper: place a small "billboard" 2D sprite at a world (d,w,h) anchor, scaled
+function placeAt(d,w,h,scale){
+  const [x,y]=iso(d,w,h);
+  return [x,y,scale];
+}
+
+// GLOBE — at left side of desk (high w)
+{
+  const [x,y]=iso(320,720,180);
+  const g=el('g',{filter:'url(#frameShadow)',transform:`translate(${x} ${y})`});
+  // tilt slightly along iso depth direction
+  // base
+  el('rect',{x:-22,y:-2,width:44,height:10,rx:2,fill:'#2a1808'},g);
+  el('rect',{x:-6,y:-12,width:12,height:10,fill:'#3a2010'},g);
+  // meridian
+  el('ellipse',{cx:0,cy:-40,rx:38,ry:38,fill:'none',stroke:'url(#brass)','stroke-width':3.5},g);
+  // sphere
+  el('circle',{cx:0,cy:-40,r:32,fill:'url(#globeG)'},g);
+  // continents
+  el('path',{d:'M -18 -52 Q -8 -58 -2 -50 Q 4 -42 -6 -36 Q -16 -34 -22 -44 Z',fill:'#4d9450'},g);
+  el('path',{d:'M 6 -32 Q 20 -34 26 -22 Q 20 -14 8 -18 Z',fill:'#4d9450'},g);
+  el('path',{d:'M -6 -22 Q 4 -16 6 -8 L -4 -4 Z',fill:'#4d9450'},g);
+  el('ellipse',{cx:-12,cy:-50,rx:14,ry:8,fill:'#8ec2dc',opacity:.45},g);
+  el('ellipse',{cx:10,cy:-30,rx:8,ry:5,fill:'#143a5c',opacity:.35},g);
+  el('rect',{x:-2,y:-82,width:4,height:8,fill:'url(#brass)'},g);
+}
+
+// CALCULATOR — at right side of desk (low w)
+{
+  const [x,y]=iso(330,310,180);
+  const g=el('g',{filter:'url(#frameShadow)',transform:`translate(${x-90} ${y-58})`});
+  // base
+  el('rect',{x:0,y:0,width:180,height:90,rx:6,fill:'#d8d4ca'},g);
+  el('rect',{x:0,y:0,width:180,height:90,rx:6,fill:'none',stroke:'#8a8478','stroke-width':2},g);
+  el('text',{x:10,y:14,'font-family':'Georgia,serif','font-size':9,'font-weight':'bold','letter-spacing':2.5,fill:'#5a5448'},g).textContent='EXTRACT-O-MATIC';
+  // screen
+  el('rect',{x:10,y:18,width:160,height:26,fill:'#9fb89f'},g);
+  el('rect',{x:10,y:18,width:160,height:26,fill:'none',stroke:'#3a3a3a','stroke-width':2},g);
+  el('text',{x:164,y:38,'text-anchor':'end','font-family':'Courier New,monospace','font-size':20,'font-weight':'bold',fill:'#0a3a0a'},g).textContent='-12,000.00';
+  // keys
+  const cols=[10,42,74,106,138];
+  const rows=[50,68];
+  rows.forEach(ry=>cols.forEach((cx,ci)=>{
+    el('rect',{x:cx,y:ry,width:26,height:14,rx:3,fill:ci===4&&ry===50?'#a52323':'#2a2a2a'},g);
+  }));
+  el('text',{x:151,y:60,'text-anchor':'middle','font-family':'Georgia,serif','font-size':8,'font-weight':'bold',fill:'#fbf3df'},g).textContent='DEBIT';
+}
+
+/* =================================================================
+   8. SERVICE BELL BUTTON — centered on desk surface
+================================================================= */
+{
+  const [x,y]=iso(290,560,180);
+  const g=el('g',{id:'bellGroup',class:'clickable',filter:'url(#frameShadow)',transform:`translate(${x} ${y})`});
+  // iso plinth (small parallelogram base)
+  // approximate iso ring at the bell's base
+  el('ellipse',{cx:0,cy:0,rx:62,ry:18,fill:'#3a1f0a'},g);
+  el('ellipse',{cx:0,cy:-4,rx:60,ry:16,fill:'url(#brass)'},g);
+  el('ellipse',{cx:0,cy:-6,rx:60,ry:14,fill:'#3a1f0a',opacity:.25},g);
+  // bell dome
+  el('ellipse',{cx:-12,cy:-20,rx:30,ry:18,fill:'#ffb8b8',opacity:.45},g);
+  el('ellipse',{cx:0,cy:-30,rx:60,ry:48,fill:'url(#bellG)'},g);
+  el('ellipse',{cx:-18,cy:-44,rx:22,ry:14,fill:'#ffb0b0',opacity:.55},g);
+  // bell stem & top button
+  el('rect',{x:-6,y:-86,width:12,height:14,fill:'#3a1f0a'},g);
+  el('circle',{cx:0,cy:-88,r:9,fill:'#3a1f0a'},g);
+  el('circle',{cx:0,cy:-88,r:5,fill:'url(#brass)'},g);
+  // engraved plaque in front of the bell, on desk top
+  el('g',{transform:'translate(0 28)'},g);
+  el('rect',{x:-120,y:30,width:240,height:24,fill:'#3a1f0a'},g);
+  el('rect',{x:-116,y:33,width:232,height:18,fill:'url(#brass)'},g);
+  el('text',{x:0,y:47,'text-anchor':'middle','font-family':'Georgia,serif','font-size':14,'font-weight':'bold','letter-spacing':4,fill:'#1a1008'},g).textContent='ASK TO GO OUTSIDE';
+}
+
+/* =================================================================
+   9. SPEECH BUBBLE (screen-aligned, hidden by default)
+================================================================= */
+{
+  const g=el('g',{id:'speech'});
+  // bubble points down to Darwin's mouth — Darwin's mouth ~ iso(540,540,200) screen
+  const [tx,ty]=iso(540,540,205);
+  // bubble body
+  const bx1=240,by1=60,bx2=1120,by2=350;
+  el('path',{
+    d:`M ${bx1+40} ${by1}
+       L ${bx2-40} ${by1}
+       Q ${bx2} ${by1} ${bx2} ${by1+40}
+       L ${bx2} ${by2-40}
+       Q ${bx2} ${by2} ${bx2-40} ${by2}
+       L ${tx+40} ${by2}
+       L ${tx} ${ty-10}
+       L ${tx-15} ${by2}
+       L ${bx1+40} ${by2}
+       Q ${bx1} ${by2} ${bx1} ${by2-40}
+       L ${bx1} ${by1+40}
+       Q ${bx1} ${by1} ${bx1+40} ${by1} Z`,
+    fill:'url(#paper)',stroke:'#1a1008','stroke-width':4,filter:'url(#softShadow)'
+  },g);
+  const tg=el('g',{},g);
+  el('text',{x:680,y:160,'text-anchor':'middle','font-family':'Georgia,serif','font-size':38,fill:'#1a1008'},tg).textContent='Sorry — but your Nature Account';
+  const t2=el('text',{x:680,y:228,'text-anchor':'middle','font-family':'Georgia,serif','font-size':38,fill:'#1a1008'},tg);
+  t2.innerHTML='is <tspan font-weight="bold" fill="#a52323">12,000</tspan> <tspan font-style="italic">overdrawn</tspan>.';
+  el('text',{x:680,y:302,'text-anchor':'middle','font-family':'Georgia,serif','font-size':18,'letter-spacing':6,fill:'#7a5a32'},tg).textContent='— M. ALVA';
+}
+
+/* =================================================================
+   10. VIGNETTE OVERLAY + TITLES
+================================================================= */
+el('rect',{x:0,y:0,width:1600,height:1000,fill:'url(#vignette)','pointer-events':'none'});
+el('text',{x:800,y:34,'text-anchor':'middle','font-family':'Georgia,serif','font-size':16,'letter-spacing':12,fill:'#6a4a24',opacity:.85,'pointer-events':'none'}).textContent='NATURE ACCOUNT';
+el('text',{x:800,y:986,'text-anchor':'middle','font-family':'Georgia,serif','font-size':13,'letter-spacing':8,fill:'#6a4a24',opacity:.75,'pointer-events':'none'}).textContent='RING THE BELL FOR SERVICE';
+
+/* =================================================================
+   11. INTERACTIONS
+================================================================= */
+const bell=document.getElementById('bellGroup');
+const door=document.getElementById('doorHit');
+const speech=document.getElementById('speech');
+let t1,t2;
+function ring(){
+  speech.classList.add('show');
+  bell.classList.remove('ringing'); void bell.getBoundingClientRect();
+  bell.classList.add('ringing');
+  clearTimeout(t1); clearTimeout(t2);
+  t1=setTimeout(()=>bell.classList.remove('ringing'),600);
+  t2=setTimeout(()=>speech.classList.remove('show'),7000);
+}
+bell.addEventListener('click',ring);
+door.addEventListener('click',ring);
 </script>
 </body>
 </html>
