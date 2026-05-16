@@ -328,61 +328,78 @@ el('ellipse',{cx:780,cy:200,rx:520,ry:200,fill:'url(#lightPool)'});
   el('path',{d:'M 700 470 L 760 530 L 830 555 L 900 530 L 960 470 L 940 475 L 880 520 L 830 540 L 780 520 L 720 475 Z',fill:'#1f1f23'},g);
   // shirt V
   el('path',{d:'M 780 510 L 830 580 L 880 510 L 870 510 L 830 555 L 790 510 Z',fill:'#f4efe1'},g);
-  // bow tie
-  el('path',{d:'M 800 510 Q 820 506 830 514 Q 840 506 860 510 L 854 538 Q 840 542 830 534 Q 820 542 806 538 Z',fill:'#0a0a0a'},g);
-  el('circle',{cx:830,cy:524,r:3,fill:'#1f1f23'},g);
-
-  // BEARD
-  el('path',{d:'M 650 460 Q 615 380 660 320 Q 660 280 700 270 L 960 270 Q 1000 280 1000 320 Q 1045 380 1010 460 Q 1020 560 980 620 Q 940 660 880 670 Q 830 678 780 670 Q 720 660 680 620 Q 640 560 650 460 Z',fill:'url(#beardG)'},g);
-  ['M 680 470 Q 700 540 690 620','M 740 480 Q 760 560 760 660','M 830 490 Q 830 580 830 670','M 920 480 Q 900 560 900 660','M 980 470 Q 960 540 970 620']
-    .forEach(d=>el('path',{d,stroke:'#c5bea7','stroke-width':2.5,fill:'none',opacity:.7},g));
-  el('ellipse',{cx:700,cy:600,rx:40,ry:50,fill:'url(#beardG)'},g);
-  el('ellipse',{cx:960,cy:600,rx:40,ry:50,fill:'url(#beardG)'},g);
-  el('ellipse',{cx:830,cy:660,rx:80,ry:30,fill:'url(#beardG)'},g);
-
-  // side hair tufts
-  el('ellipse',{cx:680,cy:320,rx:46,ry:86,fill:'#ece6d2'},g);
-  el('ellipse',{cx:985,cy:320,rx:46,ry:86,fill:'#ece6d2'},g);
+  // dark necktie (regular tie, not bow)
+  el('path',{d:'M 818 510 L 842 510 L 838 524 L 822 524 Z',fill:'#0a0a0a'},g); // knot
+  el('path',{d:'M 822 524 L 838 524 L 850 545 L 844 605 L 830 615 L 816 605 L 810 545 Z',fill:'#0e0e0e'},g);
+  el('path',{d:'M 826 528 L 834 528 L 838 545 L 836 590 L 830 600 L 824 590 L 822 545 Z',fill:'#1c1c1c',opacity:.6},g);
 
   // ears
-  el('ellipse',{cx:672,cy:345,rx:16,ry:26,fill:'url(#skinG)'},g);
-  el('ellipse',{cx:994,cy:345,rx:16,ry:26,fill:'url(#skinG)'},g);
+  el('ellipse',{cx:712,cy:345,rx:13,ry:22,fill:'url(#skinG)'},g);
+  el('ellipse',{cx:948,cy:345,rx:13,ry:22,fill:'url(#skinG)'},g);
+  el('path',{d:'M 712 340 q 0 12 4 16',stroke:'#b48058','stroke-width':1.6,fill:'none'},g);
+  el('path',{d:'M 948 340 q 0 12 -4 16',stroke:'#b48058','stroke-width':1.6,fill:'none'},g);
 
-  // bald dome
-  el('ellipse',{cx:830,cy:285,rx:140,ry:170,fill:'url(#skinG)'},g);
-  el('ellipse',{cx:820,cy:170,rx:70,ry:22,fill:'#f7e6c8',opacity:.7},g);
-  el('path',{d:'M 900 180 Q 970 240 968 350 Q 945 420 900 440 Q 920 360 920 280 Q 920 220 900 180 Z',fill:'#b88c5e',opacity:.35},g);
+  // bald head dome
+  el('ellipse',{cx:830,cy:295,rx:128,ry:175,fill:'url(#skinG)'},g);
+  // crown highlight
+  el('ellipse',{cx:818,cy:175,rx:60,ry:20,fill:'#f7e6c8',opacity:.6},g);
+  // shading on right side of dome
+  el('path',{d:'M 898 185 Q 956 245 954 360 Q 932 425 892 440 Q 912 365 912 285 Q 912 225 892 185 Z',fill:'#a87a4a',opacity:.32},g);
 
-  // forehead wrinkles
-  ['M 740 240 Q 830 230 920 240','M 745 278 Q 830 268 915 278','M 760 312 Q 830 304 900 312']
-    .forEach(d=>el('path',{d,stroke:'#a07043','stroke-width':2.5,fill:'none',opacity:.55,'stroke-linecap':'round'},g));
+  // jaw / chin extension below the dome (so the face has a real jawline)
+  el('path',{d:'M 720 425 Q 740 500 825 522 L 835 522 Q 920 500 940 425 Z',fill:'url(#skinG)'},g);
+  // jaw shading
+  el('path',{d:'M 880 440 Q 905 470 905 425 Z',fill:'#a87a4a',opacity:.3},g);
 
-  // brows
-  el('path',{d:'M 715 348 Q 760 322 822 340 Q 825 352 818 358 Q 770 348 728 366 Q 716 364 715 348 Z',fill:'#2a1a10'},g);
-  el('path',{d:'M 945 348 Q 900 322 838 340 Q 835 352 842 358 Q 890 348 932 366 Q 944 364 945 348 Z',fill:'#2a1a10'},g);
+  // single forehead crease
+  el('path',{d:'M 770 308 Q 830 298 890 308',stroke:'#a07043','stroke-width':2,fill:'none',opacity:.5,'stroke-linecap':'round'},g);
 
-  // eye recesses + eyes
-  el('ellipse',{cx:772,cy:378,rx:32,ry:18,fill:'#9e7048',opacity:.45},g);
-  el('ellipse',{cx:888,cy:378,rx:32,ry:18,fill:'#9e7048',opacity:.45},g);
-  el('ellipse',{cx:772,cy:378,rx:9,ry:6,fill:'#fbf3df'},g);
-  el('ellipse',{cx:888,cy:378,rx:9,ry:6,fill:'#fbf3df'},g);
-  el('circle',{cx:772,cy:378,r:5,fill:'#3e2c18'},g);
-  el('circle',{cx:888,cy:378,r:5,fill:'#3e2c18'},g);
-  el('circle',{cx:772,cy:378,r:2.5,fill:'#100a04'},g);
-  el('circle',{cx:888,cy:378,r:2.5,fill:'#100a04'},g);
-  el('circle',{cx:774,cy:376,r:1.6,fill:'#fff'},g);
-  el('circle',{cx:890,cy:376,r:1.6,fill:'#fff'},g);
-  el('path',{d:'M 754 392 Q 772 404 792 392',stroke:'#a07043','stroke-width':2,fill:'none',opacity:.65},g);
-  el('path',{d:'M 870 392 Q 888 404 906 392',stroke:'#a07043','stroke-width':2,fill:'none',opacity:.65},g);
+  // brows (more natural, less heavy than Darwin's)
+  el('path',{d:'M 745 352 Q 775 340 818 348 Q 818 360 775 360 Q 750 362 745 352 Z',fill:'#1a1208'},g);
+  el('path',{d:'M 915 352 Q 885 340 842 348 Q 842 360 885 360 Q 910 362 915 352 Z',fill:'#1a1208'},g);
+
+  // eye sockets + eyes
+  el('ellipse',{cx:782,cy:378,rx:28,ry:15,fill:'#9e7048',opacity:.4},g);
+  el('ellipse',{cx:878,cy:378,rx:28,ry:15,fill:'#9e7048',opacity:.4},g);
+  el('ellipse',{cx:782,cy:378,rx:8,ry:5,fill:'#fbf3df'},g);
+  el('ellipse',{cx:878,cy:378,rx:8,ry:5,fill:'#fbf3df'},g);
+  el('circle',{cx:782,cy:378,r:4.5,fill:'#3e2c18'},g);
+  el('circle',{cx:878,cy:378,r:4.5,fill:'#3e2c18'},g);
+  el('circle',{cx:782,cy:378,r:2.4,fill:'#100a04'},g);
+  el('circle',{cx:878,cy:378,r:2.4,fill:'#100a04'},g);
+  el('circle',{cx:784,cy:376,r:1.4,fill:'#fff'},g);
+  el('circle',{cx:880,cy:376,r:1.4,fill:'#fff'},g);
+  // bags under eyes
+  el('path',{d:'M 764 392 Q 782 402 800 392',stroke:'#a07043','stroke-width':1.8,fill:'none',opacity:.6},g);
+  el('path',{d:'M 860 392 Q 878 402 896 392',stroke:'#a07043','stroke-width':1.8,fill:'none',opacity:.6},g);
 
   // nose
-  el('path',{d:'M 822 358 Q 814 400 808 430 Q 805 452 822 458 L 838 458 Q 855 452 852 430 Q 846 400 838 358 Z',fill:'url(#skinG)'},g);
-  el('ellipse',{cx:830,cy:438,rx:14,ry:9,fill:'#f3d7af',opacity:.7},g);
-  el('ellipse',{cx:822,cy:450,rx:3.5,ry:2.5,fill:'#7a4e2a'},g);
-  el('ellipse',{cx:838,cy:450,rx:3.5,ry:2.5,fill:'#7a4e2a'},g);
+  el('path',{d:'M 822 358 Q 816 400 810 430 Q 808 448 824 452 L 836 452 Q 852 448 850 430 Q 844 400 838 358 Z',fill:'url(#skinG)'},g);
+  el('ellipse',{cx:830,cy:438,rx:12,ry:7,fill:'#f3d7af',opacity:.7},g);
+  el('ellipse',{cx:822,cy:446,rx:3,ry:2,fill:'#7a4e2a'},g);
+  el('ellipse',{cx:838,cy:446,rx:3,ry:2,fill:'#7a4e2a'},g);
 
-  // moustache
-  el('path',{d:'M 720 450 Q 690 446 680 462 Q 678 482 712 482 Q 760 478 800 478 Q 830 478 860 478 Q 900 478 948 482 Q 982 482 980 462 Q 970 446 940 450 Q 900 460 870 458 Q 830 454 790 458 Q 760 460 720 450 Z',fill:'url(#beardG)'},g);
+  // dark mustache (trim, just below the nose)
+  el('path',{d:'M 786 462 Q 770 460 762 466 Q 758 478 782 478 Q 805 476 822 474 Q 830 472 838 474 Q 855 476 878 478 Q 902 478 898 466 Q 890 460 874 462 Q 855 466 838 466 Q 822 466 786 462 Z',fill:'#1a1208'},g);
+  // tiny philtrum gap under nose
+  el('path',{d:'M 826 466 L 834 466 L 833 472 L 827 472 Z',fill:'url(#skinG)',opacity:.7},g);
+
+  // mouth (firm line)
+  el('path',{d:'M 810 488 Q 830 492 850 488',stroke:'#5a2a18','stroke-width':2.5,fill:'none','stroke-linecap':'round'},g);
+  el('path',{d:'M 814 494 Q 830 500 846 494',stroke:'#a06848','stroke-width':1.5,fill:'none',opacity:.5},g);
+
+  // soul-patch strands connecting mustache to goatee (anchor beard)
+  el('path',{d:'M 798 478 Q 800 492 808 502',stroke:'#1a1208','stroke-width':3,fill:'none','stroke-linecap':'round'},g);
+  el('path',{d:'M 862 478 Q 860 492 852 502',stroke:'#1a1208','stroke-width':3,fill:'none','stroke-linecap':'round'},g);
+
+  // goatee / chin patch
+  el('path',{d:'M 800 500 Q 786 516 794 534 Q 812 548 830 550 Q 848 548 866 534 Q 874 516 860 500 Q 848 506 830 506 Q 812 506 800 500 Z',fill:'#1a1208'},g);
+  // chin shadow under goatee
+  el('ellipse',{cx:830,cy:548,rx:34,ry:7,fill:'#5a2a18',opacity:.4},g);
+
+  // subtle five o'clock shadow on cheeks
+  el('ellipse',{cx:760,cy:455,rx:30,ry:18,fill:'#5a3a20',opacity:.14},g);
+  el('ellipse',{cx:900,cy:455,rx:30,ry:18,fill:'#5a3a20',opacity:.14},g);
 
   // Name badge pinned to his coat
   el('rect',{x:1020,y:516,width:180,height:46,fill:'#fbf3df',stroke:'#1a1008','stroke-width':3},g);
