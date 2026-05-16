@@ -383,6 +383,14 @@ el('ellipse',{cx:780,cy:200,rx:520,ry:200,fill:'url(#lightPool)'});
 
   // moustache
   el('path',{d:'M 720 450 Q 690 446 680 462 Q 678 482 712 482 Q 760 478 800 478 Q 830 478 860 478 Q 900 478 948 482 Q 982 482 980 462 Q 970 446 940 450 Q 900 460 870 458 Q 830 454 790 458 Q 760 460 720 450 Z',fill:'url(#beardG)'},g);
+
+  // Name badge pinned to his coat: C. DARWIN, CFA
+  el('rect',{x:1010,y:512,width:200,height:54,fill:'#fbf3df',stroke:'#1a1008','stroke-width':3},g);
+  el('rect',{x:1010,y:512,width:200,height:13,fill:'#a52323'},g);
+  el('text',{x:1110,y:548,'text-anchor':'middle','font-family':'Georgia,serif','font-size':24,'font-weight':'bold','letter-spacing':1,fill:'#1a1008'},g).textContent='C. DARWIN';
+  el('text',{x:1110,y:564,'text-anchor':'middle','font-family':'Georgia,serif','font-size':14,'letter-spacing':3,fill:'#5a3e1c'},g).textContent='CFA';
+  // pin
+  el('circle',{cx:1110,cy:520,r:3,fill:'#caa44a',stroke:'#3a1f0a','stroke-width':1},g);
 }
 
 /* =================================================================
@@ -413,12 +421,7 @@ el('ellipse',{cx:780,cy:200,rx:520,ry:200,fill:'url(#lightPool)'});
     el('rect',{x:lx0,y:90,width:170,height:80,fill:'none',stroke:'#1a0d04','stroke-width':2.5},ff);
     el('rect',{x:lx0+70,y:124,width:30,height:14,rx:3,fill:'url(#brass)',stroke:'#3a1f0a','stroke-width':1},ff);
   }
-  // MOLOTOV ALVA nameplate (right-side up, near top of desk front)
-  const nx=190, ny=18, nw=240, nh=46;
-  el('rect',{x:nx,y:ny,width:nw,height:nh,fill:'#3a1f0a'},ff);
-  el('rect',{x:nx+4,y:ny+4,width:nw-8,height:nh-8,fill:'url(#brass)'},ff);
-  el('rect',{x:nx+14,y:ny+12,width:nw-28,height:nh-24,fill:'#100a04'},ff);
-  el('text',{x:nx+nw/2,y:ny+30,'text-anchor':'middle','font-family':'Georgia,serif','font-weight':'bold','font-size':16,'letter-spacing':6,fill:'url(#brass)'},ff).textContent='MOLOTOV ALVA';
+  // (MOLOTOV ALVA nameplate is now a freestanding desk-top plate — see section 8b)
 }
 
 /* =================================================================
@@ -518,6 +521,24 @@ function placeAt(d,w,h,scale){
   el('rect',{x:-120,y:30,width:240,height:24,fill:'#3a1f0a'},g);
   el('rect',{x:-116,y:33,width:232,height:18,fill:'url(#brass)'},g);
   el('text',{x:0,y:47,'text-anchor':'middle','font-family':'Georgia,serif','font-size':13,'font-weight':'bold','letter-spacing':3,fill:'#1a1008'},g).textContent='APPLY FOR EXTRACTION';
+}
+
+/* =================================================================
+   8b. MOLOTOV ALVA desk-top nameplate (low brass plate, unobscured)
+================================================================= */
+{
+  const [px,py]=iso(210,540,180);
+  const g=el('g',{filter:'url(#frameShadow)',transform:`translate(${px} ${py})`});
+  // soft shadow on the desk
+  el('ellipse',{cx:0,cy:4,rx:108,ry:6,fill:'#1a0d04',opacity:.5});
+  // wedge wood base
+  el('rect',{x:-104,y:-4,width:208,height:10,fill:'#3a1f0a'},g);
+  el('rect',{x:-104,y:-4,width:208,height:2.5,fill:'#7a4422'},g);
+  // engraved brass plate
+  el('rect',{x:-100,y:-30,width:200,height:26,fill:'#1a1008'},g);
+  el('rect',{x:-96,y:-27,width:192,height:21,fill:'url(#brass)'},g);
+  el('rect',{x:-86,y:-23,width:172,height:14,fill:'#100a04'},g);
+  el('text',{x:0,y:-12,'text-anchor':'middle','font-family':'Georgia,serif','font-weight':'bold','font-size':14,'letter-spacing':6,fill:'url(#brass)'},g).textContent='MOLOTOV ALVA';
 }
 
 /* =================================================================
