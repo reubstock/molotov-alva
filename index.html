@@ -524,24 +524,6 @@ function placeAt(d,w,h,scale){
 }
 
 /* =================================================================
-   8b. MOLOTOV ALVA desk-top nameplate (low brass plate, unobscured)
-================================================================= */
-{
-  const [px,py]=iso(210,540,180);
-  const g=el('g',{filter:'url(#frameShadow)',transform:`translate(${px} ${py})`});
-  // soft shadow on the desk
-  el('ellipse',{cx:0,cy:4,rx:108,ry:6,fill:'#1a0d04',opacity:.5});
-  // wedge wood base
-  el('rect',{x:-104,y:-4,width:208,height:10,fill:'#3a1f0a'},g);
-  el('rect',{x:-104,y:-4,width:208,height:2.5,fill:'#7a4422'},g);
-  // engraved brass plate
-  el('rect',{x:-100,y:-30,width:200,height:26,fill:'#1a1008'},g);
-  el('rect',{x:-96,y:-27,width:192,height:21,fill:'url(#brass)'},g);
-  el('rect',{x:-86,y:-23,width:172,height:14,fill:'#100a04'},g);
-  el('text',{x:0,y:-12,'text-anchor':'middle','font-family':'Georgia,serif','font-weight':'bold','font-size':14,'letter-spacing':6,fill:'url(#brass)'},g).textContent='MOLOTOV ALVA';
-}
-
-/* =================================================================
    9. SPEECH BUBBLE (screen-aligned, hidden by default)
 ================================================================= */
 {
